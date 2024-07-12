@@ -1,4 +1,9 @@
 # go-collections
+[![Go Report Card](https://goreportcard.com/badge/github.com/idsulik/go-collections)](https://goreportcard.com/report/github.com/idsulik/go-collections)
+![Build Status](https://img.shields.io/github/actions/workflow/status/idsulik/go-collections/go.yaml?branch=main)
+[![Version](https://img.shields.io/github/v/release/idsulik/go-collections)](https://github.com/idsulik/go-collections/releases)
+[![License](https://img.shields.io/github/license/idsulik/go-collections)](https://github.com/idsulik/go-collections/blob/main/LICENSE)
+[![GoDoc](https://pkg.go.dev/badge/github.com/idsulik/go-collections)](https://pkg.go.dev/github.com/idsulik/go-collections)
 
 `go-collections` is a Go library that provides implementations of common data structures including a double-ended queue (Deque), a linked list, a queue, and a stack. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
 
@@ -118,4 +123,4 @@ A LIFO (last-in, first-out) stack that supports standard stack operations.
 
 ## License
 
-This project is licensed under the MIT License
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
