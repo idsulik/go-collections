@@ -42,6 +42,46 @@ func main() {
 
 ## Data Structures
 
+Certainly! Below is a README for the `Set` struct, following the format you provided:
+
+---
+
+# Set
+
+A set represents a collection of unique items.
+
+## Type
+
+```go
+type Set[T comparable]
+```
+
+## Constructor
+
+```go
+func New[T comparable]() *Set[T]
+```
+
+## Methods
+
+- `Add(item T)`: Adds an item to the set.
+- `Remove(item T)`: Removes an item from the set.
+- `Has(item T) bool`: Returns `true` if the set contains the specified item.
+- `Clear()`: Removes all items from the set.
+- `Len() int`: Returns the number of items in the set.
+- `IsEmpty() bool`: Returns `true` if the set is empty.
+- `Elements() []T`: Returns a slice containing all items in the set.
+- `AddAll(items ...T)`: Adds multiple items to the set.
+- `RemoveAll(items ...T)`: Removes multiple items from the set.
+- `Diff(other *Set[T]) *Set[T]`: Returns a new set containing items that are in the receiver set but not in the other set.
+- `Intersect(other *Set[T]) *Set[T]`: Returns a new set containing items that are in both the receiver set and the other set.
+- `Union(other *Set[T]) *Set[T]`: Returns a new set containing items that are in either the receiver set or the other set.
+- `IsSubset(other *Set[T]) bool`: Returns `true` if the receiver set is a subset of the other set.
+- `IsSuperset(other *Set[T]) bool`: Returns `true` if the receiver set is a superset of the other set.
+- `Equal(other *Set[T]) bool`: Returns `true` if the receiver set is equal to the other set.
+
+---
+
 ### Deque
 
 A double-ended queue (Deque) allows adding and removing elements from both the front and the back.
