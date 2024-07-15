@@ -160,6 +160,23 @@ A LIFO (last-in, first-out) stack that supports standard stack operations.
     - `Len() int`: Returns the number of items currently in the stack.
     - `IsEmpty() bool`: Checks if the stack is empty.
     - `Clear()`: Removes all items from the stack.
+- Here's the README following the provided example format strictly:
+
+### Trie
+
+A Trie (prefix tree) data structure that supports insertion and search operations for words and prefixes.
+
+#### Type `Trie`
+
+- **Constructor:**
+  ```go
+  func New() *Trie
+  ```
+
+- **Methods:**
+  - `Insert(word string)`: Adds a word to the Trie.
+  - `Search(word string) bool`: Checks if the word exists in the Trie.
+  - `StartsWith(prefix string) bool`: Checks if there is any word in the Trie that starts with the given prefix.
 
 ## License
 
