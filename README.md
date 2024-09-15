@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/idsulik/go-collections)](https://github.com/idsulik/go-collections/blob/main/LICENSE)
 [![GoDoc](https://pkg.go.dev/badge/github.com/idsulik/go-collections)](https://pkg.go.dev/github.com/idsulik/go-collections)
 
-`go-collections` is a Go library that provides implementations of common data structures including a double-ended queue (Deque), a linked list, a queue, and a stack. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
+`go-collections` is a Go package that provides implementations of common data structures including a double-ended queue (Deque), a linked list, a queue, a trie, and a stack. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
 
 ## Installation
 
