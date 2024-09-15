@@ -42,8 +42,6 @@ func main() {
 
 ## Data Structures
 
-Certainly! Below is a README for the `Set` struct, following the format you provided:
-
 ---
 
 # Set
