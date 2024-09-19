@@ -28,7 +28,7 @@ import (
 )
 
 func main() {
-	d := deque.New 
+	d := deque.New()
 	d.PushBack(1)
 	d.PushFront(2)
 
@@ -102,6 +102,8 @@ A double-ended queue (Deque) allows adding and removing elements from both the f
     - `IsEmpty() bool`: Checks if the deque is empty.
     - `Clear()`: Removes all items from the deque.
 
+---
+
 ### LinkedList
 
 A singly linked list where elements can be added or removed from both the front and the end.
@@ -120,6 +122,8 @@ A singly linked list where elements can be added or removed from both the front 
     - `RemoveBack() (T, bool)`: Removes the node from the end of the list and returns its value.
     - `Iterate(fn func(T) bool)`: Iterates over the linked list and applies a function to each node's value.
     - `Size() int`: Returns the number of elements in the list.
+
+---
 
 ### Queue
 
@@ -140,6 +144,8 @@ A FIFO (first-in, first-out) queue that supports basic queue operations.
     - `IsEmpty() bool`: Checks if the queue is empty.
     - `Clear()`: Removes all items from the queue.
 
+---
+
 ### Stack
 
 A LIFO (last-in, first-out) stack that supports standard stack operations.
@@ -158,7 +164,8 @@ A LIFO (last-in, first-out) stack that supports standard stack operations.
     - `Len() int`: Returns the number of items currently in the stack.
     - `IsEmpty() bool`: Checks if the stack is empty.
     - `Clear()`: Removes all items from the stack.
-- Here's the README following the provided example format strictly:
+
+---
 
 ### Trie
 
@@ -175,6 +182,58 @@ A Trie (prefix tree) data structure that supports insertion and search operation
   - `Insert(word string)`: Adds a word to the Trie.
   - `Search(word string) bool`: Checks if the word exists in the Trie.
   - `StartsWith(prefix string) bool`: Checks if there is any word in the Trie that starts with the given prefix.
+
+---
+### Priority Queue
+
+A priority queue allows for efficient retrieval and removal of the highest (or lowest) priority element. It's commonly used in algorithms like Dijkstra's shortest path and task scheduling.
+
+#### Type `PriorityQueue[T any]`
+
+- **Constructor:**
+
+  ```go
+  func New[T any](less func(a, b T) bool) *PriorityQueue[T]
+  ```
+
+  - `less`: A comparison function that determines the priority of elements. If `less(a, b)` returns `true`, then `a` has higher priority than `b`.
+
+- **Methods:**
+
+  - `Push(item T)`: Adds an item to the priority queue.
+  - `Pop() (T, bool)`: Removes and returns the highest priority item.
+  - `Peek() (T, bool)`: Returns the highest priority item without removing it.
+  - `Len() int`: Returns the number of items in the priority queue.
+  - `IsEmpty() bool`: Checks if the priority queue is empty.
+  - `Clear()`: Removes all items from the priority queue.
+
+---
+
+### Binary Search Tree
+
+A Binary Search Tree (BST) maintains elements in sorted order, allowing for efficient insertion, deletion, and lookup operations. Each node has at most two children, with left child values less than the parent and right child values greater.
+
+#### Type `BST[T Ordered]`
+
+- **Constructor:**
+
+  ```go
+  func New[T Ordered]() *BST[T]
+  ```
+
+  - `T Ordered`: A type constraint that ensures the elements can be compared using `<` and `>` operators. Supported types include integers, floats, and strings.
+
+- **Methods:**
+
+  - `Insert(value T)`: Inserts a value into the BST.
+  - `Remove(value T)`: Removes a value from the BST.
+  - `Contains(value T) bool`: Checks if a value exists in the BST.
+  - `InOrderTraversal(fn func(T))`: Traverses the BST in order and applies a function to each node's value.
+  - `Len() int`: Returns the number of nodes in the BST.
+  - `IsEmpty() bool`: Checks if the BST is empty.
+  - `Clear()`: Removes all nodes from the BST.
+
+---
 
 ## License
 
