@@ -1,9 +1,11 @@
-name: Go CI
+name: Go CI and Create Release
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'  # Triggers the workflow when a tag is pushed
   pull_request:
     branches:
       - main
@@ -26,3 +28,23 @@ jobs:
 
       - name: Build
         run: go build -v ./...
+
+  create_release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
