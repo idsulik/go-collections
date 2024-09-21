@@ -268,6 +268,35 @@ A Skip List is a probabilistic data structure that allows fast search, insertion
   - `Clear()`: Removes all elements from the skip list.
 
 ---
+### Graph
+
+Represents networks of nodes and edges, suitable for various algorithms like search, shortest path, and spanning trees.
+
+#### Type `Graph[T comparable]`
+
+- **Constructor:**
+
+  ```go
+  func New[T comparable](directed bool) *Graph[T]
+  ```
+
+  - `directed`: Specifies whether the graph is directed or undirected.
+
+- **Methods:**
+
+  - `AddNode(value T)`: Adds a node to the graph.
+  - `AddEdge(from, to T, weight float64)`: Adds an edge between two nodes with an optional weight.
+  - `RemoveNode(value T)`: Removes a node and all connected edges.
+  - `RemoveEdge(from, to T)`: Removes an edge between two nodes.
+  - `Neighbors(value T) []T`: Returns adjacent nodes.
+  - `HasNode(value T) bool`: Checks if a node exists.
+  - `HasEdge(from, to T) bool`: Checks if an edge exists.
+  - `GetEdgeWeight(from, to T) (float64, bool)`: Retrieves the weight of the edge between two nodes.
+  - `Traverse(start T, visit func(T))`: Traverses the graph from a starting node using Breadth-First Search.
+  - `Nodes() []T`: Returns a slice of all node values in the graph.
+  - `Edges() [][2]T`: Returns a slice of all edges in the graph.
+
+---
 
 ## License
 
