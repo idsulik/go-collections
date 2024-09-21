@@ -188,7 +188,19 @@ func TestEqual(t *testing.T) {
 	s2 := New[int]()
 	s1.AddAll(1, 2)
 	s2.AddAll(1, 2)
+
 	if !s1.Equal(s2) {
 		t.Errorf("Expected s1 to be equal to s2")
+	}
+
+	s2.Add(3)
+	if s1.Equal(s2) {
+		t.Errorf("Expected s1 not to be equal to s2")
+	}
+	s2.Remove(3)
+
+	s1.Add(3)
+	if s1.Equal(s2) {
+		t.Errorf("Expected s1 not to be equal to s2")
 	}
 }

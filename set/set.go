@@ -117,5 +117,15 @@ func (s *Set[T]) IsSuperset(other *Set[T]) bool {
 
 // Equal returns true if the receiver set is equal to the other set.
 func (s *Set[T]) Equal(other *Set[T]) bool {
-	return s.IsSubset(other) && s.IsSuperset(other)
+	if s.Len() != other.Len() {
+		return false
+	}
+
+	for item := range s.items {
+		if !other.Has(item) {
+			return false
+		}
+	}
+
+	return true
 }
