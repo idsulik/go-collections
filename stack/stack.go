@@ -20,13 +20,15 @@ func (s *Stack[T]) Push(item T) {
 // Pop removes and returns the item from the top of the stack.
 // Returns false if the stack is empty.
 func (s *Stack[T]) Pop() (T, bool) {
-	if len(s.items) == 0 {
+	if s.IsEmpty() {
 		var zero T
 		return zero, false
 	}
 
-	item := s.items[len(s.items)-1]
-	s.items = s.items[:len(s.items)-1]
+	index := len(s.items) - 1
+	item := s.items[index]
+	s.items[index] = *new(T) // remove reference
+	s.items = s.items[:index]
 
 	return item, true
 }
@@ -34,7 +36,7 @@ func (s *Stack[T]) Pop() (T, bool) {
 // Peek returns the item at the top of the stack without removing it.
 // Returns false if the stack is empty.
 func (s *Stack[T]) Peek() (T, bool) {
-	if len(s.items) == 0 {
+	if s.IsEmpty() {
 		var zero T
 		return zero, false
 	}
@@ -54,5 +56,9 @@ func (s *Stack[T]) IsEmpty() bool {
 
 // Clear removes all items from the stack, leaving it empty.
 func (s *Stack[T]) Clear() {
-	s.items = make([]T, 0)
+	for i := range s.items {
+		var zero T
+		s.items[i] = zero
+	}
+	s.items = s.items[:0]
 }
