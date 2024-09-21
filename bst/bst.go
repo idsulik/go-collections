@@ -1,27 +1,22 @@
 package bst
 
-type Ordered interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
-		~float32 | ~float64 |
-		~string
-}
+import "github.com/idsulik/go-collections/cmp"
 
 // BST represents the Binary Search Tree.
-type BST[T Ordered] struct {
+type BST[T cmp.Ordered] struct {
 	root *node[T]
 	size int
 }
 
 // node represents each node in the BST.
-type node[T Ordered] struct {
+type node[T cmp.Ordered] struct {
 	value T
 	left  *node[T]
 	right *node[T]
 }
 
 // New creates a new empty Binary Search Tree.
-func New[T Ordered]() *BST[T] {
+func New[T cmp.Ordered]() *BST[T] {
 	return &BST[T]{}
 }
 
