@@ -31,10 +31,26 @@ func (bst *BST[T]) insert(n *node[T], value T) *node[T] {
 		return &node[T]{value: value}
 	}
 
-	if value < n.value {
-		n.left = bst.insert(n.left, value)
-	} else if value > n.value {
-		n.right = bst.insert(n.right, value)
+	cur := n
+	for cur != nil {
+		if value < cur.value {
+			if cur.left == nil {
+				bst.size++
+				cur.left = &node[T]{value: value}
+				break
+			}
+			cur = cur.left
+		} else if value > cur.value {
+			if cur.right == nil {
+				bst.size++
+				cur.right = &node[T]{value: value}
+				break
+			}
+			cur = cur.right
+		} else {
+			// Value already exists
+			break
+		}
 	}
 
 	return n
