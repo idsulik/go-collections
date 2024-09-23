@@ -1,11 +1,11 @@
-package stack
+package arraystack
 
 import (
 	"testing"
 )
 
-// TestNewStack tests the creation of a new stack with an initial capacity.
-func TestNewStack(t *testing.T) {
+// TestNew tests the creation of a new stack with an initial capacity.
+func TestNew(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 
@@ -17,8 +17,8 @@ func TestNewStack(t *testing.T) {
 	}
 }
 
-// TestPush tests adding items to the stack.
-func TestPush(t *testing.T) {
+// TestArrayStackPush tests adding items to the stack.
+func TestArrayStackPush(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	s.Push(1)
@@ -33,8 +33,8 @@ func TestPush(t *testing.T) {
 	}
 }
 
-// TestPopEmpty tests popping from an empty stack.
-func TestPopEmpty(t *testing.T) {
+// TestArrayStackPopEmpty tests popping from an empty stack.
+func TestArrayStackPopEmpty(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	if _, ok := s.Pop(); ok {
@@ -42,8 +42,8 @@ func TestPopEmpty(t *testing.T) {
 	}
 }
 
-// TestPeek tests peeking at the top of the stack.
-func TestPeek(t *testing.T) {
+// TestArrayStackPeek tests peeking at the top of the stack.
+func TestArrayStackPeek(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	s.Push(1)
@@ -59,8 +59,8 @@ func TestPeek(t *testing.T) {
 	}
 }
 
-// TestPeekEmpty tests peeking into an empty stack.
-func TestPeekEmpty(t *testing.T) {
+// TestArrayStackPeekEmpty tests peeking into an empty stack.
+func TestArrayStackPeekEmpty(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	if _, ok := s.Peek(); ok {
@@ -68,8 +68,8 @@ func TestPeekEmpty(t *testing.T) {
 	}
 }
 
-// TestLen tests the length of the stack.
-func TestLen(t *testing.T) {
+// TestArrayStackLen tests the length of the stack.
+func TestArrayStackLen(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	if got := s.Len(); got != 0 {
@@ -83,8 +83,8 @@ func TestLen(t *testing.T) {
 	}
 }
 
-// TestIsEmpty tests checking if the stack is empty.
-func TestIsEmpty(t *testing.T) {
+// TestArrayStackIsEmpty tests checking if the stack is empty.
+func TestArrayStackIsEmpty(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	if !s.IsEmpty() {
@@ -102,8 +102,8 @@ func TestIsEmpty(t *testing.T) {
 	}
 }
 
-// TestClear tests clearing the stack.
-func TestClear(t *testing.T) {
+// TestArrayStackClear tests clearing the stack.
+func TestArrayStackClear(t *testing.T) {
 	// Create a new stack with an initial capacity of 10
 	s := New[int](10)
 	s.Push(1)

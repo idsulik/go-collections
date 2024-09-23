@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/idsulik/go-collections)](https://github.com/idsulik/go-collections/blob/main/LICENSE)
 [![GoDoc](https://pkg.go.dev/badge/github.com/idsulik/go-collections)](https://pkg.go.dev/github.com/idsulik/go-collections)
 
-`go-collections` is a Go package that provides implementations of common data structures including a double-ended queue (Deque), a linked list, a queue, a trie, a stack, a priority queue, a binary search tree, and a skip list. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
+`go-collections` is a Go package that provides implementations of common data structures, including a double-ended queue (Deque), various stack implementations, a linked list, a queue, a trie, a priority queue, a binary search tree, a skip list, and a graph. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
 
 ## Installation
 
@@ -119,10 +119,14 @@ A singly linked list where elements can be added or removed from both the front 
 
   - `AddFront(value T)`: Adds a new node with the given value to the front of the list.
   - `AddBack(value T)`: Adds a new node with the given value to the end of the list.
-  - `RemoveFront() (T, bool)`: Removes the node from the front of the list and returns its value.
-  - `RemoveBack() (T, bool)`: Removes the node from the end of the list and returns its value.
-  - `Iterate(fn func(T) bool)`: Iterates over the linked list and applies a function to each node's value.
+  - `PeekFront() (T, bool)`: Returns the value of the node at the front without removing it.
+  - `PeekBack() (T, bool)`: Returns the value of the node at the end without removing it.
+  - `RemoveFront() (T, bool)`: Removes the node from the front and returns its value.
+  - `RemoveBack() (T, bool)`: Removes the node from the end and returns its value.
+  - `Iterate(fn func(T) bool)`: Iterates over the list and applies a function to each node's value until the function returns false or the end is reached.
+  - `IsEmpty() bool`: Checks if the list is empty.
   - `Size() int`: Returns the number of elements in the list.
+  - `Clear()`: Removes all elements from the list.
 
 ---
 
@@ -149,23 +153,67 @@ A FIFO (first-in, first-out) queue that supports basic queue operations.
 
 ---
 
-### Stack
+### Stack Interface
 
-A LIFO (last-in, first-out) stack that supports standard stack operations.
+An interface representing a LIFO (last-in, first-out) stack.
 
 #### Type `Stack[T any]`
-
-- **Constructor:**
-
-  ```go
-  func New[T any](initialCapacity int) *Stack[T]
-  ```
 
 - **Methods:**
 
   - `Push(item T)`: Adds an item to the top of the stack.
   - `Pop() (T, bool)`: Removes and returns the item from the top of the stack.
-  - `Peek() (T, bool)`: Returns the item at the top of the stack without removing it.
+  - `Peek() (T, bool)`: Returns the item at the top without removing it.
+  - `Len() int`: Returns the number of items in the stack.
+  - `IsEmpty() bool`: Checks if the stack is empty.
+  - `Clear()`: Removes all items from the stack.
+
+---
+
+### ArrayStack
+
+An array-based stack implementation using a slice.
+
+#### Type `ArrayStack[T any]`
+
+- **Constructor:**
+
+  ```go
+  func New[T any](initialCapacity int) *ArrayStack[T]
+  ```
+
+- **Implements:** `Stack[T]`
+
+- **Methods:**
+
+  - `Push(item T)`: Adds an item to the top of the stack.
+  - `Pop() (T, bool)`: Removes and returns the item from the top.
+  - `Peek() (T, bool)`: Returns the item at the top without removing it.
+  - `Len() int`: Returns the number of items currently in the stack.
+  - `IsEmpty() bool`: Checks if the stack is empty.
+  - `Clear()`: Removes all items, leaving the stack empty.
+
+---
+
+### LinkedListStack
+
+A linked list-based stack implementation.
+
+#### Type `LinkedListStack[T any]`
+
+- **Constructor:**
+
+  ```go
+  func New[T any]() *LinkedListStack[T]
+  ```
+
+- **Implements:** `Stack[T]`
+
+- **Methods:**
+
+  - `Push(item T)`: Adds an item to the top of the stack.
+  - `Pop() (T, bool)`: Removes and returns the item from the top.
+  - `Peek() (T, bool)`: Returns the item at the top without removing it.
   - `Len() int`: Returns the number of items currently in the stack.
   - `IsEmpty() bool`: Checks if the stack is empty.
   - `Clear()`: Removes all items from the stack.

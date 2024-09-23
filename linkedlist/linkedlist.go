@@ -25,6 +25,15 @@ func (l *LinkedList[T]) AddFront(value T) {
 	l.size++
 }
 
+// PeekFront returns the value of the node at the front of the list without removing it.
+func (l *LinkedList[T]) PeekFront() (T, bool) {
+	if l.head == nil {
+		var zero T
+		return zero, false
+	}
+	return l.head.Value, true
+}
+
 // AddBack adds a new node with the given value to the end of the list.
 func (l *LinkedList[T]) AddBack(value T) {
 	newNode := &Node[T]{Value: value}
@@ -36,6 +45,15 @@ func (l *LinkedList[T]) AddBack(value T) {
 		l.head = newNode
 	}
 	l.size++
+}
+
+// PeekBack returns the value of the node at the end of the list without removing it.
+func (l *LinkedList[T]) PeekBack() (T, bool) {
+	if l.tail == nil {
+		var zero T
+		return zero, false
+	}
+	return l.tail.Value, true
 }
 
 // RemoveFront removes the node from the front of the list and returns its value.
@@ -89,7 +107,19 @@ func (l *LinkedList[T]) Iterate(fn func(T) bool) {
 	}
 }
 
+// IsEmpty checks if the list is empty.
+func (l *LinkedList[T]) IsEmpty() bool {
+	return l.size == 0
+}
+
 // Size returns the number of elements in the list.
 func (l *LinkedList[T]) Size() int {
 	return l.size
+}
+
+// Clear removes all elements from the list.
+func (l *LinkedList[T]) Clear() {
+	l.head = nil
+	l.tail = nil
+	l.size = 0
 }
