@@ -8,7 +8,26 @@
 
 `go-collections` is a Go package that provides implementations of common data structures, including a double-ended queue (Deque), various stack implementations, a linked list, a queue, a trie, a priority queue, a binary search tree, a skip list, and a graph. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
 
-## Installation
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Data Structures](#data-structures)
+   - [Set](#set)
+   - [Deque](#deque)
+   - [LinkedList](#linkedlist)
+   - [Queue](#queue)
+   - [Stack Interface](#stack-interface)
+   - [ArrayStack](#arraystack)
+   - [LinkedListStack](#linkedliststack)
+   - [Trie](#trie)
+   - [Priority Queue](#priority-queue)
+   - [Binary Search Tree](#binary-search-tree)
+   - [Skip List](#skip-list)
+   - [Graph](#graph)
+4. [License](#license)
+
+## [Installation](#installation)
 
 You can install the package using the Go module system:
 
@@ -16,7 +35,7 @@ You can install the package using the Go module system:
 go get github.com/idsulik/go-collections
 ```
 
-## Usage
+## [Usage](#usage)
 
 Here is a brief example of how to use the `Deque`:
 
@@ -41,11 +60,9 @@ func main() {
 }
 ```
 
-## Data Structures
+## [Data Structures](#data-structures)
 
----
-
-### Set
+### [Set](#set)
 
 A set represents a collection of unique items.
 
@@ -77,7 +94,7 @@ A set represents a collection of unique items.
 
 ---
 
-### Deque
+### [Deque](#deque)
 
 A double-ended queue (Deque) allows adding and removing elements from both the front and the back.
 
@@ -103,7 +120,7 @@ A double-ended queue (Deque) allows adding and removing elements from both the f
 
 ---
 
-### LinkedList
+### [LinkedList](#linkedlist)
 
 A singly linked list where elements can be added or removed from both the front and the end.
 
@@ -130,7 +147,7 @@ A singly linked list where elements can be added or removed from both the front 
 
 ---
 
-### Queue
+### [Queue](#queue)
 
 A FIFO (first-in, first-out) queue that supports basic queue operations.
 
@@ -153,7 +170,7 @@ A FIFO (first-in, first-out) queue that supports basic queue operations.
 
 ---
 
-### Stack Interface
+### [Stack Interface](#stack-interface)
 
 An interface representing a LIFO (last-in, first-out) stack.
 
@@ -170,7 +187,7 @@ An interface representing a LIFO (last-in, first-out) stack.
 
 ---
 
-### ArrayStack
+### [ArrayStack](#arraystack)
 
 An array-based stack implementation using a slice.
 
@@ -195,7 +212,7 @@ An array-based stack implementation using a slice.
 
 ---
 
-### LinkedListStack
+### [LinkedListStack](#linkedliststack)
 
 A linked list-based stack implementation.
 
@@ -220,7 +237,7 @@ A linked list-based stack implementation.
 
 ---
 
-### Trie
+### [Trie](#trie)
 
 A Trie (prefix tree) data structure that supports insertion and search operations for words and prefixes.
 
@@ -240,7 +257,7 @@ A Trie (prefix tree) data structure that supports insertion and search operation
 
 ---
 
-### Priority Queue
+### [Priority Queue](#priorityqueue)
 
 A priority queue allows for efficient retrieval and removal of the highest (or lowest) priority element. It's commonly used in algorithms like Dijkstra's shortest path and task scheduling.
 
@@ -265,7 +282,7 @@ A priority queue allows for efficient retrieval and removal of the highest (or l
 
 ---
 
-### Binary Search Tree
+### [Binary Search Tree](#binarysearchtree)
 
 A Binary Search Tree (BST) maintains elements in sorted order, allowing for efficient insertion, deletion, and lookup operations. Each node has at most two children, with left child values less than the parent and right child values greater.
 
@@ -291,7 +308,7 @@ A Binary Search Tree (BST) maintains elements in sorted order, allowing for effi
 
 ---
 
-### Skip List
+### [Skip List](#skiplist)
 
 A Skip List is a probabilistic data structure that allows fast search, insertion, and deletion operations within an ordered sequence of elements. It achieves efficiency by maintaining multiple levels of linked lists, where each higher level skips over a larger number of elements, allowing operations to be performed in O(log n) average time.
 
@@ -316,7 +333,7 @@ A Skip List is a probabilistic data structure that allows fast search, insertion
   - `Clear()`: Removes all elements from the skip list.
 
 ---
-### Graph
+### [Graph](#graph)
 
 Represents networks of nodes and edges, suitable for various algorithms like search, shortest path, and spanning trees.
 
@@ -346,6 +363,6 @@ Represents networks of nodes and edges, suitable for various algorithms like sea
 
 ---
 
-## License
+## [License](#license)
 
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
