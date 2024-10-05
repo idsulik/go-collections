@@ -8,7 +8,26 @@
 
 `go-collections` is a Go package that provides implementations of common data structures, including a double-ended queue (Deque), various stack implementations, a linked list, a queue, a trie, a priority queue, a binary search tree, a skip list, and a graph. This package offers a simple and efficient way to use these structures in Go, with support for generic types.
 
-## Installation
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Data Structures](#data-structures)
+   - [Set](#set)
+   - [Deque](#deque)
+   - [LinkedList](#linkedlist)
+   - [Queue](#queue)
+   - [Stack Interface](#stack-interface)
+   - [ArrayStack](#arraystack)
+   - [LinkedListStack](#linkedliststack)
+   - [Trie](#trie)
+   - [Priority Queue](#priority-queue)
+   - [Binary Search Tree](#binary-search-tree)
+   - [Skip List](#skip-list)
+   - [Graph](#graph)
+4. [License](#license)
+
+## [Installation](#installation)
 
 You can install the package using the Go module system:
 
@@ -16,7 +35,7 @@ You can install the package using the Go module system:
 go get github.com/idsulik/go-collections
 ```
 
-## Usage
+## [Usage](#usage)
 
 Here is a brief example of how to use the `Deque`:
 
@@ -41,7 +60,7 @@ func main() {
 }
 ```
 
-## Data Structures
+## [Data Structures](#data-structures)
 
 ---
 
