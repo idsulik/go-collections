@@ -62,9 +62,7 @@ func main() {
 
 ## [Data Structures](#data-structures)
 
----
-
-### Set
+### [Set](#set)
 
 A set represents a collection of unique items.
 
@@ -96,7 +94,7 @@ A set represents a collection of unique items.
 
 ---
 
-### Deque
+### [Deque](#deque)
 
 A double-ended queue (Deque) allows adding and removing elements from both the front and the back.
 
@@ -122,7 +120,7 @@ A double-ended queue (Deque) allows adding and removing elements from both the f
 
 ---
 
-### LinkedList
+### [LinkedList](#linkedlist)
 
 A singly linked list where elements can be added or removed from both the front and the end.
 
