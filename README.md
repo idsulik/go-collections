@@ -25,6 +25,7 @@
    - [Binary Search Tree](#binary-search-tree)
    - [Skip List](#skip-list)
    - [Graph](#graph)
+   - [BloomFilter](#bloom-filter)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -362,7 +363,80 @@ Represents networks of nodes and edges, suitable for various algorithms like sea
   - `Edges() [][2]T`: Returns a slice of all edges in the graph.
 
 ---
+### [Bloom Filter](#bloom-filter)
+
+A Bloom Filter is a space-efficient probabilistic data structure used to test whether an element is a member of a set. False positive matches are possible, but false negatives are not. Elements can be added to the set, but not removed.
+
+#### Type `BloomFilter[T any]`
+
+- **Constructor:**
+
+  ```go
+  func NewBloomFilter[T any](expectedItems uint, falsePositiveProb float64) *BloomFilter[T]
+  ```
+
+    - `expectedItems`: Expected number of items to be added to the filter
+    - `falsePositiveProb`: Desired false positive probability (between 0 and 1)
+
+- **Methods:**
+
+    - `Add(item T)`: Adds an item to the Bloom Filter.
+    - `Contains(item T) bool`: Tests whether an item might be in the set.
+    - `EstimatedFalsePositiveRate() float64`: Returns the current estimated false positive rate.
+    - `Clear()`: Removes all items from the Bloom Filter.
+    - `Len() int`: Returns the number of items added to the Bloom Filter.
+    - `IsEmpty() bool`: Returns true if no items have been added.
+    - `BitSize() uint`: Returns the size of the underlying bit array.
+    - `NumberOfHashes() uint`: Returns the number of hash functions being used.
+
+#### Example Usage:
+
+```go
+// Create a new Bloom Filter expecting 1000 items with 1% false positive rate
+bf := collections.NewBloomFilter[string](1000, 0.01)
+
+// Add some items
+bf.Add("apple")
+bf.Add("banana")
+bf.Add("cherry")
+
+// Check for membership
+if bf.Contains("apple") {
+    fmt.Println("'apple' is probably in the set")
+}
+
+// Get current false positive rate
+fmt.Printf("False positive rate: %f\n", bf.EstimatedFalsePositiveRate())
+
+// Clear the filter
+bf.Clear()
+```
+
+#### Performance Characteristics:
+
+- Space Complexity: O(m), where m is the size of the bit array
+- Time Complexity:
+    - Add: O(k), where k is the number of hash functions
+    - Contains: O(k), where k is the number of hash functions
+- False Positive Probability: (1 - e^(-kn/m))^k
+    - k: number of hash functions
+    - n: number of inserted elements
+    - m: size of bit array
+
+#### Use Cases:
+
+- Duplicate detection
+- Cache filtering
+- URL shorteners
+- Spell checkers
+- Network routing
+- Database query optimization
+
+#### Notes:
+
+- The Bloom Filter automatically optimizes the number of hash functions and bit array size based on the expected number of items and desired false positive rate.
+- The actual false positive rate may vary slightly from the target rate due to the probabilistic nature of the data structure.
+- The filter supports any type that can be converted to a string representation.
 
 ## [License](#license)
-
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
