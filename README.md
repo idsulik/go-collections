@@ -26,6 +26,7 @@
    - [Skip List](#skip-list)
    - [Graph](#graph)
    - [BloomFilter](#bloom-filter)
+   - [RingBuffer(Circular Buffer)](#ring-buffer)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -437,6 +438,88 @@ bf.Clear()
 - The Bloom Filter automatically optimizes the number of hash functions and bit array size based on the expected number of items and desired false positive rate.
 - The actual false positive rate may vary slightly from the target rate due to the probabilistic nature of the data structure.
 - The filter supports any type that can be converted to a string representation.
+
+### [Ring Buffer](#ring-buffer)
+
+A Ring Buffer (also known as a Circular Buffer) is a fixed-size buffer that wraps around to the beginning when it reaches the end. It's particularly useful for streaming data processing, implementing queues with size limits, and managing buffers in embedded systems.
+
+#### Type `RingBuffer[T any]`
+
+- **Constructor:**
+
+```go
+  func New[T any](capacity int) *RingBuffer[T]
+  ```
+
+- **Methods:**
+
+- `Write(item T) bool`: Adds an item to the buffer. Returns false if the buffer is full.
+- `Read() (T, bool)`: Removes and returns the oldest item from the buffer.
+- `Peek() (T, bool)`: Returns the oldest item without removing it.
+- `IsFull() bool`: Returns true if the buffer is at capacity.
+- `IsEmpty() bool`: Returns true if the buffer contains no items.
+- `Cap() int`: Returns the total capacity of the buffer.
+- `Len() int`: Returns the current number of items in the buffer.
+- `Clear()`: Removes all items from the buffer.
+
+#### Example Usage:
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/idsulik/go-collections/ring"
+)
+
+func main() {
+    // Create a new ring buffer with capacity 3
+    rb := ring.New[string](3)
+
+    // Add some items
+    rb.Write("first")
+    rb.Write("second")
+    rb.Write("third")
+
+    // Buffer is now full
+    fmt.Println(rb.IsFull()) // Output: true
+
+    // Read an item
+    value, ok := rb.Read()
+    if ok {
+        fmt.Println(value) // Output: "first"
+    }
+
+    // Now we can write another item
+    rb.Write("fourth")
+
+    // Read all remaining items
+    for !rb.IsEmpty() {
+        if value, ok := rb.Read(); ok {
+            fmt.Println(value)
+        }
+    }
+}
+```
+
+#### Performance Characteristics:
+
+- Space Complexity: O(n), where n is the buffer capacity
+- Time Complexity:
+- Write: O(1)
+- Read: O(1)
+- Peek: O(1)
+- Clear: O(1)
+
+#### Use Cases:
+
+- Streaming data processing
+- Fixed-size queues
+- Audio/video buffering
+- Producer-consumer scenarios
+- Network packet buffering
+- Event handling systems
+- Embedded systems with memory constraints
 
 ## [License](#license)
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
