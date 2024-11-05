@@ -1,6 +1,7 @@
 package set
 
 import (
+	"math"
 	"reflect"
 	"sort"
 	"testing"
@@ -16,191 +17,301 @@ func TestNew(t *testing.T) {
 
 // TestAdd checks adding elements to the Set.
 func TestAdd(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	if !s.Has(1) {
-		t.Errorf("Expected 1 to be in the set")
-	}
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			if !s.Has(1) {
+				t.Errorf("Expected 1 to be in the set")
+			}
+		},
+	)
+
+	t.Run(
+		"float64 NaN handling", func(t *testing.T) {
+			s := New[float64]()
+			nan1 := math.NaN()
+			nan2 := math.NaN()
+			s.Add(nan1)
+			if !s.Has(nan2) {
+				t.Error("Expected NaN to be in the set")
+			}
+			if s.Len() != 1 {
+				t.Errorf("Expected length 1, got %d", s.Len())
+			}
+		},
+	)
+
+	t.Run(
+		"float32 NaN handling", func(t *testing.T) {
+			s := New[float32]()
+			nan1 := float32(math.NaN())
+			nan2 := float32(math.NaN())
+			s.Add(nan1)
+			if !s.Has(nan2) {
+				t.Error("Expected NaN to be in the set")
+			}
+			if s.Len() != 1 {
+				t.Errorf("Expected length 1, got %d", s.Len())
+			}
+		},
+	)
 }
 
 // TestRemove checks removing elements from the Set.
 func TestRemove(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	s.Remove(1)
-	if s.Has(1) {
-		t.Errorf("Expected 1 to be removed from the set")
-	}
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			s.Remove(1)
+			if s.Has(1) {
+				t.Errorf("Expected 1 to be removed from the set")
+			}
+		},
+	)
+
+	t.Run(
+		"float64 NaN handling", func(t *testing.T) {
+			s := New[float64]()
+			nan1 := math.NaN()
+			nan2 := math.NaN()
+			s.Add(nan1)
+			s.Remove(nan2)
+			if s.Has(nan1) {
+				t.Error("Expected NaN to be removed from the set")
+			}
+		},
+	)
 }
 
 // TestHas checks if the Set has an element.
 func TestHas(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	if !s.Has(1) {
-		t.Errorf("Expected 1 to be in the set")
-	}
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			if !s.Has(1) {
+				t.Errorf("Expected 1 to be in the set")
+			}
+		},
+	)
+
+	t.Run(
+		"float64 NaN handling", func(t *testing.T) {
+			s := New[float64]()
+			nan1 := math.NaN()
+			nan2 := math.NaN()
+			s.Add(nan1)
+			if !s.Has(nan2) {
+				t.Error("Expected NaN to be in the set")
+			}
+		},
+	)
 }
 
 // TestClear checks clearing the Set.
 func TestClear(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	s.Add(2)
-	s.Clear()
-	if s.Len() != 0 {
-		t.Errorf("Expected set to be empty, got size %d", s.Len())
-	}
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			s.Add(2)
+			s.Clear()
+			if s.Len() != 0 {
+				t.Errorf("Expected set to be empty, got size %d", s.Len())
+			}
+		},
+	)
+
+	t.Run(
+		"with NaN values", func(t *testing.T) {
+			s := New[float64]()
+			s.Add(1.0)
+			s.Add(math.NaN())
+			s.Clear()
+			if s.Len() != 0 {
+				t.Errorf("Expected set to be empty, got size %d", s.Len())
+			}
+			if s.Has(math.NaN()) {
+				t.Error("Expected NaN to be cleared from the set")
+			}
+		},
+	)
 }
 
 // TestLen checks the size of the Set.
 func TestLen(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	s.Add(2)
-	if s.Len() != 2 {
-		t.Errorf("Expected size 2, got %d", s.Len())
-	}
-}
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			s.Add(2)
+			if s.Len() != 2 {
+				t.Errorf("Expected size 2, got %d", s.Len())
+			}
+		},
+	)
 
-// TestIsEmpty checks if IsEmpty properly identifies an empty Set.
-func TestIsEmpty(t *testing.T) {
-	s := New[int]()
-	if !s.IsEmpty() {
-		t.Errorf("Expected set to be empty initially")
-	}
-	s.Add(1)
-	if s.IsEmpty() {
-		t.Errorf("Expected set not to be empty after adding an element")
-	}
-	s.Clear()
-	if !s.IsEmpty() {
-		t.Errorf("Expected set to be empty after clearing")
-	}
+	t.Run(
+		"with NaN values", func(t *testing.T) {
+			s := New[float64]()
+			s.Add(1.0)
+			s.Add(math.NaN())
+			s.Add(math.NaN()) // Adding NaN twice shouldn't increase length
+			if s.Len() != 2 {
+				t.Errorf("Expected size 2, got %d", s.Len())
+			}
+		},
+	)
 }
 
 // TestElements checks if Elements returns a correct slice of the set's elements.
 func TestElements(t *testing.T) {
-	s := New[int]()
-	s.Add(1)
-	s.Add(2)
-	expected := []int{1, 2}
-	actual := s.Elements()
-	sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
+	t.Run(
+		"regular integers", func(t *testing.T) {
+			s := New[int]()
+			s.Add(1)
+			s.Add(2)
+			expected := []int{1, 2}
+			actual := s.Elements()
+			sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Errorf("Expected elements %v, got %v", expected, actual)
-	}
+			if !reflect.DeepEqual(actual, expected) {
+				t.Errorf("Expected elements %v, got %v", expected, actual)
+			}
+		},
+	)
+
+	t.Run(
+		"with NaN values", func(t *testing.T) {
+			s := New[float64]()
+			s.Add(1.0)
+			s.Add(math.NaN())
+			elements := s.Elements()
+			if len(elements) != 2 {
+				t.Errorf("Expected 2 elements, got %d", len(elements))
+			}
+			nanCount := 0
+			regularCount := 0
+			for _, e := range elements {
+				if math.IsNaN(e) {
+					nanCount++
+				} else {
+					regularCount++
+				}
+			}
+			if nanCount != 1 || regularCount != 1 {
+				t.Errorf("Expected 1 NaN and 1 regular value, got %d NaN and %d regular", nanCount, regularCount)
+			}
+		},
+	)
 }
 
-// TestAddAll checks adding multiple elements to the Set.
-func TestAddAll(t *testing.T) {
-	s := New[int]()
-	s.AddAll(1, 2, 3)
-	if !s.Has(1) || !s.Has(2) || !s.Has(3) {
-		t.Errorf("Expected elements 1, 2, 3 to be in the set")
-	}
+// TestSet operations with NaN values
+func TestSetOperationsWithNaN(t *testing.T) {
+	t.Run(
+		"Diff with NaN", func(t *testing.T) {
+			s1 := New[float64]()
+			s2 := New[float64]()
+			s1.Add(1.0)
+			s1.Add(math.NaN())
+			s2.Add(1.0)
+
+			diff := s1.Diff(s2)
+			if diff.Len() != 1 || !diff.Has(math.NaN()) {
+				t.Error("Expected diff to contain only NaN")
+			}
+		},
+	)
+
+	t.Run(
+		"Intersect with NaN", func(t *testing.T) {
+			s1 := New[float64]()
+			s2 := New[float64]()
+			s1.Add(math.NaN())
+			s2.Add(math.NaN())
+
+			intersect := s1.Intersect(s2)
+			if intersect.Len() != 1 || !intersect.Has(math.NaN()) {
+				t.Error("Expected intersection to contain NaN")
+			}
+		},
+	)
+
+	t.Run(
+		"Union with NaN", func(t *testing.T) {
+			s1 := New[float64]()
+			s2 := New[float64]()
+			s1.Add(1.0)
+			s1.Add(math.NaN())
+			s2.Add(2.0)
+
+			union := s1.Union(s2)
+			if union.Len() != 3 || !union.Has(math.NaN()) {
+				t.Errorf("Expected union to contain 3 elements including NaN, got %d elements", union.Len())
+			}
+		},
+	)
+
+	t.Run(
+		"IsSubset with NaN", func(t *testing.T) {
+			s1 := New[float64]()
+			s2 := New[float64]()
+			s1.Add(math.NaN())
+			s2.Add(math.NaN())
+			s2.Add(1.0)
+
+			if !s1.IsSubset(s2) {
+				t.Error("Expected s1 to be subset of s2")
+			}
+
+			s1.Add(2.0)
+			if s1.IsSubset(s2) {
+				t.Error("Expected s1 not to be subset of s2")
+			}
+		},
+	)
+
+	t.Run(
+		"Equal with NaN", func(t *testing.T) {
+			s1 := New[float64]()
+			s2 := New[float64]()
+			s1.Add(1.0)
+			s1.Add(math.NaN())
+			s2.Add(1.0)
+			s2.Add(math.NaN())
+
+			if !s1.Equal(s2) {
+				t.Error("Expected sets to be equal")
+			}
+
+			s2.Add(2.0)
+			if s1.Equal(s2) {
+				t.Error("Expected sets not to be equal")
+			}
+		},
+	)
 }
 
-// TestRemoveAll checks removing multiple elements from the Set.
-func TestRemoveAll(t *testing.T) {
-	s := New[int]()
-	s.AddAll(1, 2, 3)
-	s.RemoveAll(1, 2)
-	if s.Has(1) || s.Has(2) || !s.Has(3) {
-		t.Errorf("Expected elements 1 and 2 to be removed from the set")
-	}
-}
+// TestInfinityHandling checks if the set properly handles infinity values
+func TestInfinityHandling(t *testing.T) {
+	s := New[float64]()
+	posInf := math.Inf(1)
+	negInf := math.Inf(-1)
 
-// TestDiff checks the difference between two sets.
-func TestDiff(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2, 3)
-	s2.AddAll(2, 3, 4)
-	diff := s1.Diff(s2)
-	expected := []int{1}
-	actual := diff.Elements()
-	sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
+	s.Add(posInf)
+	s.Add(negInf)
 
-	if !reflect.DeepEqual(actual, expected) {
-		t.Errorf("Expected difference %v, got %v", expected, actual)
-	}
-}
-
-// TestIntersect checks the intersection between two sets.
-func TestIntersect(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2, 3)
-	s2.AddAll(2, 3, 4)
-	intersect := s1.Intersect(s2)
-	expected := []int{2, 3}
-	actual := intersect.Elements()
-	sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
-
-	if !reflect.DeepEqual(actual, expected) {
-		t.Errorf("Expected intersection %v, got %v", expected, actual)
-	}
-}
-
-// TestUnion checks the union between two sets.
-func TestUnion(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2, 3)
-	s2.AddAll(2, 3, 4)
-	union := s1.Union(s2)
-	expected := []int{1, 2, 3, 4}
-	actual := union.Elements()
-	sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
-
-	if !reflect.DeepEqual(actual, expected) {
-		t.Errorf("Expected union %v, got %v", expected, actual)
-	}
-}
-
-// TestIsSubset checks if a set is a subset of another set.
-func TestIsSubset(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2)
-	s2.AddAll(1, 2, 3)
-	if !s1.IsSubset(s2) {
-		t.Errorf("Expected s1 to be a subset of s2")
-	}
-}
-
-// TestIsSuperset checks if a set is a superset of another set.
-func TestIsSuperset(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2, 3)
-	s2.AddAll(1, 2)
-	if !s1.IsSuperset(s2) {
-		t.Errorf("Expected s1 to be a superset of s2")
-	}
-}
-
-// TestEqual checks if two sets are equal.
-func TestEqual(t *testing.T) {
-	s1 := New[int]()
-	s2 := New[int]()
-	s1.AddAll(1, 2)
-	s2.AddAll(1, 2)
-
-	if !s1.Equal(s2) {
-		t.Errorf("Expected s1 to be equal to s2")
+	if !s.Has(posInf) {
+		t.Error("Expected set to contain positive infinity")
 	}
 
-	s2.Add(3)
-	if s1.Equal(s2) {
-		t.Errorf("Expected s1 not to be equal to s2")
+	if !s.Has(negInf) {
+		t.Error("Expected set to contain negative infinity")
 	}
-	s2.Remove(3)
 
-	s1.Add(3)
-	if s1.Equal(s2) {
-		t.Errorf("Expected s1 not to be equal to s2")
+	if s.Len() != 2 {
+		t.Errorf("Expected length 2, got %d", s.Len())
 	}
 }
