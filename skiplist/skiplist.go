@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/idsulik/go-collections/cmp"
+	"github.com/idsulik/go-collections/internal/cmp"
 )
 
 // SkipList represents the Skip List.
