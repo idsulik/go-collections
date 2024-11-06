@@ -27,6 +27,7 @@
    - [Graph](#graph)
    - [BloomFilter](#bloom-filter)
    - [RingBuffer(Circular Buffer)](#ring-buffer)
+   - [SegmentTree](#segment-tree)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -520,6 +521,61 @@ func main() {
 - Network packet buffering
 - Event handling systems
 - Embedded systems with memory constraints
+
+### [Segment Tree](#segment-tree)
+
+A Segment Tree is a versatile data structure that supports various range query operations (sum, minimum, maximum, GCD, etc.) with efficient updates. It provides O(log n) complexity for both range queries and point updates.
+
+#### Type `SegmentTree[T any]`
+
+- **Constructor:**
+
+  ```go
+  func NewSegmentTree[T any](arr []T, identity T, combine Operation[T]) *SegmentTree[T]
+  ```
+
+  - `arr`: Initial array of elements
+  - `identity`: Identity element for the operation (e.g., 0 for sum, Inf for min)
+  - `combine`: Function that defines how to combine elements (e.g., addition for sum queries)
+
+- **Methods:**
+
+  - `Update(index int, value T)`: Updates the value at the given index
+  - `Query(left, right int) T`: Returns the result of the operation for the range [left, right]
+
+#### Example Usage:
+
+```go
+// Create a segment tree for range sum queries
+arr := []int{1, 3, 5, 7, 9}
+st := collections.NewSegmentTree(arr, 0, func(a, b int) int { return a + b })
+
+// Query range sum
+sum := st.Query(1, 3) // Sum of elements from index 1 to 3
+
+// Update value
+st.Update(2, 6) // Change value at index 2 to 6
+
+// Create a segment tree for range minimum queries
+minSt := collections.NewSegmentTree(arr, math.Inf(1), func(a, b float64) float64 {
+    return math.Min(a, b)
+})
+```
+
+#### Performance Characteristics:
+
+- Construction: O(n)
+- Range Query: O(log n)
+- Point Update: O(log n)
+- Space Complexity: O(n)
+
+#### Use Cases:
+
+- Range sum/min/max queries with updates
+- Finding GCD/LCM over ranges
+- Statistical range queries
+- Competitive programming
+- Database query optimization
 
 ## [License](#license)
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
