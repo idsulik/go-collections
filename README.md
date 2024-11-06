@@ -440,6 +440,7 @@ bf.Clear()
 - The actual false positive rate may vary slightly from the target rate due to the probabilistic nature of the data structure.
 - The filter supports any type that can be converted to a string representation.
 
+---
 ### [Ring Buffer](#ring-buffer)
 
 A Ring Buffer (also known as a Circular Buffer) is a fixed-size buffer that wraps around to the beginning when it reaches the end. It's particularly useful for streaming data processing, implementing queues with size limits, and managing buffers in embedded systems.
@@ -522,6 +523,7 @@ func main() {
 - Event handling systems
 - Embedded systems with memory constraints
 
+---
 ### [Segment Tree](#segment-tree)
 
 A Segment Tree is a versatile data structure that supports various range query operations (sum, minimum, maximum, GCD, etc.) with efficient updates. It provides O(log n) complexity for both range queries and point updates.
