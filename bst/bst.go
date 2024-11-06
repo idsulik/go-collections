@@ -1,6 +1,6 @@
 package bst
 
-import "github.com/idsulik/go-collections/internal/cmp"
+import "github.com/idsulik/go-collections/v2/internal/cmp"
 
 // BST represents the Binary Search Tree.
 type BST[T cmp.Ordered] struct {

@@ -1,6 +1,6 @@
 package queue
 
-import "github.com/idsulik/go-collections/deque"
+import "github.com/idsulik/go-collections/v2/deque"
 
 type Queue[T any] struct {
 	d *deque.Deque[T]

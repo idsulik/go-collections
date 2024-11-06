@@ -47,7 +47,7 @@ package main
 
 import (
   "fmt"
-  "github.com/idsulik/go-collections/deque"
+  "github.com/idsulik/go-collections/v2/deque"
 )
 
 func main() {
@@ -470,7 +470,7 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/ring"
+    "github.com/idsulik/go-collections/v2/ring"
 )
 
 func main() {

@@ -1,6 +1,6 @@
 package linkedliststack
 
-import "github.com/idsulik/go-collections/linkedlist"
+import "github.com/idsulik/go-collections/v2/linkedlist"
 
 // LinkedListStack represents a LIFO (last-in, first-out) stack implemented using a linked list.
 type LinkedListStack[T any] struct {
