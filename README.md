@@ -660,18 +660,26 @@ Where α(n) is the inverse Ackermann function, which grows extremely slowly and 
 - Percolation analysis
 ---
 
+## Performance Comparison
 
-| Data Structure | Access   | Search   | Insertion | Deletion | Space                    |
-|----------------|----------|----------|-----------|----------|--------------------------|
-| Array          | O(1)     | O(n)     | O(n)      | O(n)     | O(n)                     |
-| Set            | O(1)     | O(1)     | O(1)      | O(1)     | O(n)                     |
-| Queue          | O(1)     | O(n)     | O(1)      | O(1)     | O(n)                     |
-| Priority Queue | O(1)     | O(n)     | O(log n)  | O(log n) | O(n)                     |
-| BST (balanced) | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
-| Trie           | O(m)     | O(m)     | O(m)      | O(m)     | O(ALPHABET_SIZE * m * n) |
-| Graph          | O(1)     | O(V+E)   | O(1)      | O(V+E)   | O(V+E)                   |
-| BloomFilter    | N/A      | O(k)     | O(k)      | N/A      | O(m)                     |
-| Disjoint Set   | O(α(n))  | O(α(n))  | O(α(n))   | O(α(n))  | O(n)                     |
+| Data Structure  | Access   | Search   | Insertion | Deletion | Space                    |
+|-----------------|----------|----------|-----------|----------|--------------------------|
+| Array           | O(1)     | O(n)     | O(n)      | O(n)     | O(n)                     |
+| Set             | O(1)     | O(1)     | O(1)      | O(1)     | O(n)                     |
+| Queue           | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
+| Priority Queue  | O(1)     | O(1)     | O(log n)  | O(log n) | O(n)                     |
+| BST (balanced)  | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
+| Trie            | O(m)     | O(m)     | O(m)      | O(m)     | O(ALPHABET_SIZE * m * n) |
+| Graph           | O(1)     | O(V+E)   | O(E)      | O(E)     | O(V+E)                   |
+| BloomFilter     | N/A      | O(k)     | O(k)      | N/A      | O(m)                     |
+| Disjoint Set    | O(α(n))  | O(α(n))  | O(α(n))   | O(α(n))  | O(n)                     |
+| RingBuffer      | O(1)     | O(n)     | O(1)      | O(1)     | O(n)                     |
+| SkipList        | O(1)     | O(log n) | O(log n)  | O(log n) | O(n log n)               |
+| LinkedList      | O(n)     | O(n)     | O(1)      | O(1)**   | O(n)                     |
+| SegmentTree     | O(1)     | O(log n) | O(log n)  | O(log n) | O(n)                     |
+| ArrayStack      | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
+| LinkedListStack | O(1)     | O(n)     | O(1)      | O(1)     | O(n)                     |
+| Deque           | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
 
 Where:
 - n is the number of elements
@@ -680,6 +688,8 @@ Where:
 - V is the number of vertices
 - E is the number of edges
 - α(n) is the inverse Ackermann function (effectively constant)
+- * indicates amortized time complexity
+- ** for LinkedList, deletion is O(1) at front/back but O(n) for arbitrary position
 
 ## Contributing
 
