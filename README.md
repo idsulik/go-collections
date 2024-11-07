@@ -28,6 +28,7 @@
    - [BloomFilter](#bloom-filter)
    - [RingBuffer(Circular Buffer)](#ring-buffer)
    - [SegmentTree](#segment-tree)
+   - [DisjointSet(UnionFind)](#disjoint-set)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -578,6 +579,85 @@ minSt := collections.NewSegmentTree(arr, math.Inf(1), func(a, b float64) float64
 - Statistical range queries
 - Competitive programming
 - Database query optimization
+---
+### [Disjoint Set](#disjoint-set)
 
+A Disjoint Set (also known as Union-Find) is a data structure that keeps track of elements partitioned into non-overlapping subsets. It provides near-constant-time operations to merge sets and determine if two elements belong to the same set.
+
+#### Type `DisjointSet[T comparable]`
+
+- **Constructor:**
+
+  ```go
+  func New[T comparable]() *DisjointSet[T]
+  ```
+
+- **Methods:**
+
+  - `MakeSet(x T)`: Creates a new set containing a single element.
+  - `Find(x T) T`: Returns the representative element of the set containing x.
+  - `Union(x, y T)`: Merges the sets containing elements x and y.
+  - `Connected(x, y T) bool`: Returns true if elements x and y are in the same set.
+  - `Clear()`: Removes all elements from the disjoint set.
+  - `Len() int`: Returns the number of elements in the disjoint set.
+  - `IsEmpty() bool`: Returns true if the disjoint set contains no elements.
+  - `GetSets() map[T][]T`: Returns a map of representatives to their set members.
+
+#### Example Usage:
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/idsulik/go-collections/v2/disjointset"
+)
+
+func main() {
+    // Create a new disjoint set
+    ds := disjointset.New[string]()
+
+    // Create individual sets
+    ds.MakeSet("A")
+    ds.MakeSet("B")
+    ds.MakeSet("C")
+    ds.MakeSet("D")
+
+    // Merge sets
+    ds.Union("A", "B")
+    ds.Union("C", "D")
+
+    // Check if elements are in the same set
+    fmt.Println(ds.Connected("A", "B")) // true
+    fmt.Println(ds.Connected("A", "C")) // false
+
+    // Get all sets
+    sets := ds.GetSets()
+    for root, elements := range sets {
+        fmt.Printf("Set with root %v: %v\n", root, elements)
+    }
+}
+```
+
+#### Performance Characteristics:
+
+- MakeSet: O(1)
+- Find: O(α(n)) amortized (nearly constant)
+- Union: O(α(n)) amortized (nearly constant)
+- Connected: O(α(n)) amortized (nearly constant)
+
+Where α(n) is the inverse Ackermann function, which grows extremely slowly and is effectively constant for all practical values of n.
+
+#### Use Cases:
+
+- Detecting cycles in graphs
+- Finding connected components
+- Network connectivity
+- Image processing (connected component labeling)
+- Kruskal's minimum spanning tree algorithm
+- Dynamic connectivity problems
+- Online dynamic connectivity
+- Percolation analysis
+---
 ## [License](#license)
 This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
