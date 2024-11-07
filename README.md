@@ -36,7 +36,7 @@
 You can install the package using the Go module system:
 
 ```sh
-go get github.com/idsulik/go-collections
+go get github.com/idsulik/go-collections/v2
 ```
 
 ## [Usage](#usage)
@@ -659,5 +659,40 @@ Where α(n) is the inverse Ackermann function, which grows extremely slowly and 
 - Online dynamic connectivity
 - Percolation analysis
 ---
-## [License](#license)
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+
+
+| Data Structure | Access   | Search   | Insertion | Deletion | Space                    |
+|----------------|----------|----------|-----------|----------|--------------------------|
+| Array          | O(1)     | O(n)     | O(n)      | O(n)     | O(n)                     |
+| Set            | O(1)     | O(1)     | O(1)      | O(1)     | O(n)                     |
+| Queue          | O(1)     | O(n)     | O(1)      | O(1)     | O(n)                     |
+| Priority Queue | O(1)     | O(n)     | O(log n)  | O(log n) | O(n)                     |
+| BST (balanced) | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
+| Trie           | O(m)     | O(m)     | O(m)      | O(m)     | O(ALPHABET_SIZE * m * n) |
+| Graph          | O(1)     | O(V+E)   | O(1)      | O(V+E)   | O(V+E)                   |
+| BloomFilter    | N/A      | O(k)     | O(k)      | N/A      | O(m)                     |
+| Disjoint Set   | O(α(n))  | O(α(n))  | O(α(n))   | O(α(n))  | O(n)                     |
+
+Where:
+- n is the number of elements
+- m is the length of the string/key
+- k is the number of hash functions
+- V is the number of vertices
+- E is the number of edges
+- α(n) is the inverse Ackermann function (effectively constant)
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to all contributors who have helped shape this library
+- Inspired by various Go community projects and standard library patterns
+
+
+
