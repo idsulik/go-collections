@@ -471,12 +471,12 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/v2/ring"
+    "github.com/idsulik/go-collections/v2/ringbuffer"
 )
 
 func main() {
     // Create a new ring buffer with capacity 3
-    rb := ring.New[string](3)
+    rb := ringbuffer.New[string](3)
 
     // Add some items
     rb.Write("first")
