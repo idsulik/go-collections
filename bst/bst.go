@@ -62,17 +62,18 @@ func (bst *BST[T]) Contains(value T) bool {
 }
 
 func (bst *BST[T]) contains(n *node[T], value T) bool {
-	if n == nil {
-		return false
+	cur := n
+	for cur != nil {
+		if value < cur.value {
+			cur = cur.left
+		} else if value > cur.value {
+			cur = cur.right
+		} else {
+			return true
+		}
 	}
 
-	if value < n.value {
-		return bst.contains(n.left, value)
-	} else if value > n.value {
-		return bst.contains(n.right, value)
-	}
-
-	return true
+	return false
 }
 
 // Remove deletes a value from the BST.
