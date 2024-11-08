@@ -29,6 +29,7 @@
    - [RingBuffer(Circular Buffer)](#ring-buffer)
    - [SegmentTree](#segment-tree)
    - [DisjointSet(UnionFind)](#disjoint-set)
+   - [AVL Tree](#avl-tree)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -658,6 +659,123 @@ Where α(n) is the inverse Ackermann function, which grows extremely slowly and 
 - Dynamic connectivity problems
 - Online dynamic connectivity
 - Percolation analysis
+---
+
+### [AVL Tree](#avl-tree)
+
+An AVL tree is a self-balancing binary search tree where the heights of the two child subtrees of any node differ by at most one. This balancing ensures O(log n) time complexity for insertions, deletions, and lookups.
+
+#### Type `AVLTree[T any]`
+
+- **Constructor:**
+
+  ```go
+  func New[T any](compare func(a, b T) int) *AVLTree[T]
+  ```
+
+  - `compare`: A comparison function that returns:
+    - -1 if a < b
+    - 0 if a == b
+    - 1 if a > b
+
+- **Methods:**
+
+  - `Insert(value T)`: Adds a value to the tree while maintaining AVL balance
+  - `Delete(value T) bool`: Removes a value from the tree while maintaining AVL balance
+  - `Search(value T) bool`: Checks if a value exists in the tree
+  - `InOrderTraversal(fn func(T))`: Visits all nodes in ascending order
+  - `Clear()`: Removes all elements from the tree
+  - `Size() int`: Returns the number of nodes in the tree
+  - `IsEmpty() bool`: Checks if the tree is empty
+  - `Height() int`: Returns the height of the tree
+
+#### Example Usage:
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/idsulik/go-collections/v2/avltree"
+)
+
+// Compare function for integers
+func compareInts(a, b int) int {
+    if a < b {
+        return -1
+    }
+    if a > b {
+        return 1
+    }
+    return 0
+}
+
+func main() {
+    // Create a new AVL tree
+    tree := avl.New[int](compareInts)
+
+    // Insert values
+    values := []int{50, 30, 70, 20, 40, 60, 80}
+    for _, v := range values {
+        tree.Insert(v)
+    }
+
+    // Search for values
+    fmt.Println(tree.Search(30)) // true
+    fmt.Println(tree.Search(45)) // false
+
+    // Traverse the tree in order
+    tree.InOrderTraversal(func(value int) {
+        fmt.Printf("%d ", value)
+    }) // Output: 20 30 40 50 60 70 80
+
+    // Delete a value
+    tree.Delete(30)
+
+    // Check size and height
+    fmt.Printf("\nSize: %d, Height: %d\n", tree.Size(), tree.Height())
+}
+```
+
+#### Performance Characteristics:
+
+| Operation | Average Case | Worst Case |
+|-----------|--------------|------------|
+| Space     | O(n)         | O(n)       |
+| Search    | O(log n)     | O(log n)   |
+| Insert    | O(log n)     | O(log n)   |
+| Delete    | O(log n)     | O(log n)   |
+
+Where n is the number of nodes in the tree.
+
+#### Balance Property:
+
+The AVL tree maintains the following invariants:
+1. The heights of the left and right subtrees of any node differ by at most 1
+2. Balance factor = height(left subtree) - height(right subtree)
+3. Balance factor must be in {-1, 0, 1} for all nodes
+
+#### Use Cases:
+
+1. **Database Indexing:**
+   - Maintaining sorted indices for fast lookups
+   - Range queries on indexed columns
+
+2. **Memory Management:**
+   - Managing memory allocation segments
+   - Virtual memory page tables
+
+3. **File System:**
+   - Directory structures
+   - File allocation tables
+
+4. **Network Routing:**
+   - IP routing tables
+   - Network flow optimization
+
+5. **Game Development:**
+   - Spatial partitioning
+   - Scene graph management
 ---
 
 ## Performance Comparison
