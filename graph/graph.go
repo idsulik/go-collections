@@ -240,3 +240,16 @@ func (g *Graph[T]) Edges() [][2]T {
 
 	return edges
 }
+
+func (g *Graph[T]) Iterator() *Iterator[T] {
+	nodes := g.Nodes()
+	if len(nodes) == 0 {
+		return &Iterator[T]{
+			visited: make(map[T]bool),
+			queue:   make([]T, 0),
+			graph:   g,
+		}
+	}
+
+	return NewIterator(g, nodes[0])
+}

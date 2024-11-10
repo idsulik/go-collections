@@ -194,3 +194,8 @@ func (s *Set[T]) handleNan(other *Set[T], out *Set[T]) {
 		}
 	}
 }
+
+// Iterator returns a new iterator for the set.
+func (s *Set[T]) Iterator() *Iterator[T] {
+	return NewIterator(s.Elements())
+}

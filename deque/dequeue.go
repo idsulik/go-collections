@@ -127,3 +127,7 @@ func (d *Deque[T]) Clear() {
 	d.tail = 0
 	d.size = 0
 }
+
+func (d *Deque[T]) GetItems() []T {
+	return d.buffer
+}

@@ -44,3 +44,8 @@ func (q *Queue[T]) IsEmpty() bool {
 func (q *Queue[T]) Clear() {
 	q.d.Clear()
 }
+
+// Iterator returns a new iterator for the queue.
+func (q *Queue[T]) Iterator() *Iterator[T] {
+	return NewIterator(q)
+}

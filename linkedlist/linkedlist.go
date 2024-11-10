@@ -15,6 +15,10 @@ func New[T any]() *LinkedList[T] {
 	return &LinkedList[T]{}
 }
 
+func (l *LinkedList[T]) Iterator() *Iterator[T] {
+	return NewIterator(l)
+}
+
 // AddFront adds a new node with the given value to the front of the list.
 func (l *LinkedList[T]) AddFront(value T) {
 	newNode := &Node[T]{Value: value, Next: l.head}
