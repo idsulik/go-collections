@@ -2,6 +2,7 @@ package priorityqueue
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/idsulik/go-collections/v2/internal/cmp"
 )
@@ -105,11 +106,20 @@ func (pq *PriorityQueue[T]) Clear() {
 
 // MarshalJSON implements json.Marshaler interface
 func (pq *PriorityQueue[T]) MarshalJSON() ([]byte, error) {
+	if pq == nil {
+		return nil, fmt.Errorf("cannot marshal nil PriorityQueue")
+	}
+
 	return json.Marshal(pq.items)
 }
 
 // UnmarshalJSON implements json.Unmarshaler interface
 func (pq *PriorityQueue[T]) UnmarshalJSON(data []byte) error {
+	// Check if the priority queue is initialized
+	if pq == nil {
+		return fmt.Errorf("cannot unmarshal into nil PriorityQueue")
+	}
+
 	var items []T
 	if err := json.Unmarshal(data, &items); err != nil {
 		return err
@@ -128,6 +138,15 @@ func (pq *PriorityQueue[T]) UnmarshalJSON(data []byte) error {
 func (pq *PriorityQueue[T]) Contains(item T) bool {
 	for _, v := range pq.items {
 		if pq.equals(item, v) {
+			return true
+		}
+	}
+	return false
+}
+
+func (pq *PriorityQueue[T]) ContainsFunc(fn func(T) bool) bool {
+	for _, v := range pq.items {
+		if fn(v) {
 			return true
 		}
 	}
@@ -164,6 +183,14 @@ func (pq *PriorityQueue[T]) Remove(item T) bool {
 		}
 	}
 	return false
+}
+
+func (pq *PriorityQueue[T]) Clone() *PriorityQueue[T] {
+	return &PriorityQueue[T]{
+		items:  append([]T(nil), pq.items...),
+		less:   pq.less,
+		equals: pq.equals,
+	}
 }
 
 // Keys returns a slice of all items in the queue, maintaining heap order
