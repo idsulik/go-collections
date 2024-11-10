@@ -2,22 +2,14 @@ package avltree
 
 import (
 	"testing"
-)
 
-func compareInts(a, b int) int {
-	if a < b {
-		return -1
-	}
-	if a > b {
-		return 1
-	}
-	return 0
-}
+	"github.com/idsulik/go-collections/v2/internal/cmp"
+)
 
 func TestAVLTree(t *testing.T) {
 	t.Run(
 		"Basic Operations", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 
 			// Test Insert and Search
 			tree.Insert(5)
@@ -40,7 +32,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"Balance After Insert", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 
 			// Left-Left case
 			tree.Insert(30)
@@ -66,7 +58,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"Delete Operations", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 
 			// Insert some values
 			values := []int{10, 5, 15, 3, 7, 12, 17}
@@ -96,7 +88,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"InOrder Traversal", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 			values := []int{5, 3, 7, 1, 4, 6, 8}
 			expected := []int{1, 3, 4, 5, 6, 7, 8}
 
@@ -125,7 +117,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"Height Calculation", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 
 			if h := tree.Height(); h != 0 {
 				t.Errorf("Expected height 0 for empty tree, got %d", h)
@@ -146,7 +138,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"Clear and IsEmpty", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 
 			if !tree.IsEmpty() {
 				t.Error("New tree should be empty")
@@ -173,7 +165,7 @@ func TestAVLTree(t *testing.T) {
 
 	t.Run(
 		"Complex Balancing", func(t *testing.T) {
-			tree := New[int](compareInts)
+			tree := New[int](cmp.CompareInts)
 			values := []int{10, 20, 30, 40, 50, 25}
 
 			for _, v := range values {

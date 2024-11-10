@@ -5,18 +5,9 @@ import (
 	"math/rand"
 	"testing"
 	"time"
-)
 
-// compareInts is a helper function for comparing integers
-func compareInts(a, b int) int {
-	if a < b {
-		return -1
-	}
-	if a > b {
-		return 1
-	}
-	return 0
-}
+	"github.com/idsulik/go-collections/v2/internal/cmp"
+)
 
 // verifyRedBlackProperties checks if the tree maintains Red-Black properties
 func verifyRedBlackProperties[T any](t *RedBlackTree[T]) bool {
@@ -77,7 +68,7 @@ func verifyNodeProperties[T any](n *node[T], parent *node[T]) (int, bool) {
 }
 
 func TestNewRedBlackTree(t *testing.T) {
-	tree := New[int](compareInts)
+	tree := New[int](cmp.CompareInts)
 	if tree == nil {
 		t.Error("Expected non-nil tree")
 	}
@@ -105,7 +96,7 @@ func TestRedBlackTree_Insert(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(
 			tt.name, func(t *testing.T) {
-				tree := New[int](compareInts)
+				tree := New[int](cmp.CompareInts)
 				uniqueValues := make(map[int]bool)
 
 				for _, v := range tt.values {
@@ -171,7 +162,7 @@ func TestRedBlackTree_Delete(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(
 			tt.name, func(t *testing.T) {
-				tree := New[int](compareInts)
+				tree := New[int](cmp.CompareInts)
 
 				// Insert values
 				for _, v := range tt.insertOrder {
@@ -232,7 +223,7 @@ func TestRedBlackTree_InOrderTraversal(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(
 			tt.name, func(t *testing.T) {
-				tree := New[int](compareInts)
+				tree := New[int](cmp.CompareInts)
 				for _, v := range tt.values {
 					tree.Insert(v)
 				}
@@ -274,7 +265,7 @@ func TestRedBlackTree_Height(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(
 			tt.name, func(t *testing.T) {
-				tree := New[int](compareInts)
+				tree := New[int](cmp.CompareInts)
 				for _, v := range tt.values {
 					tree.Insert(v)
 				}
@@ -289,7 +280,7 @@ func TestRedBlackTree_Height(t *testing.T) {
 }
 
 func TestRedBlackTree_Clear(t *testing.T) {
-	tree := New[int](compareInts)
+	tree := New[int](cmp.CompareInts)
 	values := []int{5, 3, 7, 1, 9}
 
 	for _, v := range values {
@@ -317,7 +308,7 @@ func TestRedBlackTree_Clear(t *testing.T) {
 }
 
 func TestRedBlackTree_RandomOperations(t *testing.T) {
-	tree := New[int](compareInts)
+	tree := New[int](cmp.CompareInts)
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	operations := 1000
@@ -370,7 +361,7 @@ func BenchmarkRedBlackTree(b *testing.B) {
 		b.Run(
 			fmt.Sprintf("Insert_%s", bm.name), func(b *testing.B) {
 				for i := 0; i < b.N; i++ {
-					tree := New[int](compareInts)
+					tree := New[int](cmp.CompareInts)
 					for j := 0; j < bm.size; j++ {
 						tree.Insert(j)
 					}
@@ -380,7 +371,7 @@ func BenchmarkRedBlackTree(b *testing.B) {
 
 		b.Run(
 			fmt.Sprintf("Search_%s", bm.name), func(b *testing.B) {
-				tree := New[int](compareInts)
+				tree := New[int](cmp.CompareInts)
 				for i := 0; i < bm.size; i++ {
 					tree.Insert(i)
 				}
@@ -400,7 +391,7 @@ func BenchmarkRedBlackTree(b *testing.B) {
 				b.ResetTimer()
 				for i := 0; i < b.N; i++ {
 					b.StopTimer()
-					tree := New[int](compareInts)
+					tree := New[int](cmp.CompareInts)
 					for _, v := range values {
 						tree.Insert(v)
 					}
