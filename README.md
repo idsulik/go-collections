@@ -30,6 +30,7 @@
    - [SegmentTree](#segment-tree)
    - [DisjointSet(UnionFind)](#disjoint-set)
    - [AVL Tree](#avl-tree)
+   - [RedBlack Tree](#redblack-tree)
 4. [License](#license)
 
 ## [Installation](#installation)
@@ -776,6 +777,115 @@ The AVL tree maintains the following invariants:
 5. **Game Development:**
    - Spatial partitioning
    - Scene graph management
+---
+### [Red-Black Tree](#red-black-tree)
+A Red-Black Tree is a self-balancing binary search tree where each node is colored either red or black, following specific rules that maintain balance. This ensures O(log n) time complexity for insertions, deletions, and lookups.
+
+#### Type `RedBlackTree[T any]`
+- **Constructor:**
+```go
+func New[T any](compare func(a, b T) int) *RedBlackTree[T]
+```
+- *`compare`*: A comparison function that returns:
+  - -1 if a < b
+  - 0 if a == b
+  - 1 if a > b
+
+- **Methods:**
+  - `Insert(value T)`: Adds a value to the tree while maintaining Red-Black properties
+  - `Delete(value T) bool`: Removes a value from the tree while maintaining Red-Black properties
+  - `Search(value T) bool`: Checks if a value exists in the tree
+  - `InOrderTraversal(fn func(T))`: Visits all nodes in ascending order
+  - `Clear()`: Removes all elements from the tree
+  - `Size() int`: Returns the number of nodes in the tree
+  - `IsEmpty() bool`: Checks if the tree is empty
+  - `Height() int`: Returns the height of the tree
+
+#### Example Usage:
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/idsulik/go-collections/v2/rbtree"
+)
+
+// Compare function for integers
+func compareInts(a, b int) int {
+    if a < b {
+        return -1
+    }
+    if a > b {
+        return 1
+    }
+    return 0
+}
+
+func main() {
+    // Create a new Red-Black tree
+    tree := rbtree.New[int](compareInts)
+
+    // Insert values
+    values := []int{50, 30, 70, 20, 40, 60, 80}
+    for _, v := range values {
+        tree.Insert(v)
+    }
+
+    // Search for values
+    fmt.Println(tree.Search(30))  // true
+    fmt.Println(tree.Search(45))  // false
+
+    // Traverse the tree in order
+    tree.InOrderTraversal(func(value int) {
+        fmt.Printf("%d ", value)
+    }) // Output: 20 30 40 50 60 70 80
+
+    // Delete a value
+    tree.Delete(30)
+
+    // Check size and height
+    fmt.Printf("\nSize: %d, Height: %d\n", tree.Size(), tree.Height())
+}
+```
+
+#### Performance Characteristics:
+| Operation | Average Case | Worst Case |
+|-----------|--------------|------------|
+| Space     | O(n)         | O(n)       |
+| Search    | O(log n)     | O(log n)   |
+| Insert    | O(log n)     | O(log n)   |
+| Delete    | O(log n)     | O(log n)   |
+
+Where n is the number of nodes in the tree.
+
+#### Balance Property:
+The Red-Black tree maintains the following invariants:
+1. Every node is either red or black
+2. The root is always black
+3. All leaves (NIL nodes) are black
+4. If a node is red, both its children are black
+5. Every path from root to leaf contains the same number of black nodes
+
+#### Use Cases:
+1. **Database Systems:**
+  - Index structures implementation
+  - Multi-version concurrency control
+
+2. **Memory Management:**
+  - Virtual memory segment trees
+  - Memory allocation tracking
+
+3. **File Systems:**
+  - Directory organization
+  - File system journaling
+
+4. **Process Scheduling:**
+  - Task prioritization
+  - Real-time scheduling
+
+5. **Programming Languages:**
+  - Symbol table implementation
+  - Garbage collection algorithms
 ---
 
 ## Performance Comparison
