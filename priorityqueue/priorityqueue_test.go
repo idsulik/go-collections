@@ -1,8 +1,146 @@
 package priorityqueue
 
 import (
+	"encoding/json"
 	"testing"
 )
+
+func TestPriorityQueueOptions(t *testing.T) {
+	t.Run(
+		"Custom Equals Function", func(t *testing.T) {
+			type Person struct {
+				ID   int
+				Name string
+				Age  int
+			}
+
+			pq := New(
+				func(a, b Person) bool {
+					return a.Age < b.Age
+				},
+			)
+
+			// Add custom equals that only compares IDs
+			ApplyOptions(
+				pq, WithEquals(
+					func(a, b Person) bool {
+						return a.ID == b.ID
+					},
+				),
+			)
+
+			p1 := Person{ID: 1, Name: "Alice", Age: 30}
+			p2 := Person{ID: 1, Name: "Alice Updated", Age: 31} // Same ID, different age
+			p3 := Person{ID: 2, Name: "Bob", Age: 25}
+
+			pq.Push(p1)
+
+			// Should return false because ID already exists
+			if pq.PushIfAbsent(p2) {
+				t.Error("Should not allow push of person with same ID")
+			}
+
+			// Should allow push of person with different ID
+			if !pq.PushIfAbsent(p3) {
+				t.Error("Should allow push of person with different ID")
+			}
+		},
+	)
+
+	t.Run(
+		"Ordered Type With Custom Equals", func(t *testing.T) {
+			pq := NewOrdered[int]()
+
+			// Override default equals
+			ApplyOptions(
+				pq, WithEquals(
+					func(a, b int) bool {
+						// Consider numbers equal if they have the same parity
+						return (a % 2) == (b % 2)
+					},
+				),
+			)
+
+			pq.Push(1)
+			pq.Push(3)
+
+			// Should not add 5 as it's considered equal to 1 (both odd)
+			if pq.PushIfAbsent(5) {
+				t.Error("Should not add 5 as it's considered equal to existing odd number")
+			}
+
+			// Should add 2 as it's even
+			if !pq.PushIfAbsent(2) {
+				t.Error("Should add 2 as no even numbers exist")
+			}
+		},
+	)
+
+	t.Run(
+		"Update Less Function", func(t *testing.T) {
+			pq := NewOrdered[int]()
+
+			// Change from min-heap to max-heap
+			ApplyOptions(
+				pq, WithLess(
+					func(a, b int) bool {
+						return a > b
+					},
+				),
+			)
+
+			nums := []int{1, 3, 2, 5, 4}
+			for _, n := range nums {
+				pq.Push(n)
+			}
+
+			// Should now pop in descending order
+			expected := []int{5, 4, 3, 2, 1}
+			for _, exp := range expected {
+				if val, ok := pq.Pop(); !ok || val != exp {
+					t.Errorf("Expected %d, got %d", exp, val)
+				}
+			}
+		},
+	)
+
+	t.Run(
+		"Multiple Options", func(t *testing.T) {
+			pq := NewOrdered[int]()
+
+			ApplyOptions(
+				pq,
+				WithLess(
+					func(a, b int) bool {
+						return a > b // max-heap
+					},
+				),
+				WithEquals(
+					func(a, b int) bool {
+						return a/10 == b/10 // equal if same tens digit
+					},
+				),
+			)
+
+			pq.Push(11)
+
+			// Should not add 15 as it's in the same tens group as 11
+			if pq.PushIfAbsent(15) {
+				t.Error("Should not add 15 as it's in same tens group as 11")
+			}
+
+			// Should add 21 as it's in different tens group
+			if !pq.PushIfAbsent(21) {
+				t.Error("Should add 21 as it's in different tens group")
+			}
+
+			// First pop should be 21 due to max-heap property
+			if val, ok := pq.Pop(); !ok || val != 21 {
+				t.Errorf("Expected 21, got %d", val)
+			}
+		},
+	)
+}
 
 func TestPriorityQueue(t *testing.T) {
 	less := func(a, b int) bool {
@@ -202,5 +340,137 @@ func TestLargeDataSet(t *testing.T) {
 		if item != i {
 			t.Errorf("Expected %d, got %d", i, item)
 		}
+	}
+}
+
+func TestMarshalUnmarshal(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	// Add some items
+	items := []int{5, 3, 4, 1, 2}
+	for _, item := range items {
+		pq.Push(item)
+	}
+
+	// Marshal
+	data, err := json.Marshal(pq)
+	if err != nil {
+		t.Fatalf("Failed to marshal: %v", err)
+	}
+
+	// Create new queue and unmarshal
+	newPQ := New(less)
+	err = json.Unmarshal(data, newPQ)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal: %v", err)
+	}
+
+	// Verify contents
+	for i := 1; i <= 5; i++ {
+		item, ok := newPQ.Pop()
+		if !ok || item != i {
+			t.Errorf("Expected %d, got %d", i, item)
+		}
+	}
+}
+
+func TestContains(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	if !pq.Contains(2) {
+		t.Error("Expected to find 2 in queue")
+	}
+
+	if pq.Contains(4) {
+		t.Error("Did not expect to find 4 in queue")
+	}
+}
+
+func TestPushIfAbsent(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	// First push should succeed
+	if !pq.PushIfAbsent(1) {
+		t.Error("First push should succeed")
+	}
+
+	// Second push of same value should fail
+	if pq.PushIfAbsent(1) {
+		t.Error("Second push should fail")
+	}
+
+	if pq.Len() != 1 {
+		t.Errorf("Expected length 1, got %d", pq.Len())
+	}
+}
+
+func TestRemove(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	// Remove existing item
+	if !pq.Remove(2) {
+		t.Error("Expected to remove 2")
+	}
+
+	// Try to remove non-existent item
+	if pq.Remove(4) {
+		t.Error("Should not be able to remove non-existent item")
+	}
+
+	// Verify remaining items
+	expected := []int{1, 3}
+	for _, exp := range expected {
+		item, ok := pq.Pop()
+		if !ok || item != exp {
+			t.Errorf("Expected %d, got %d", exp, item)
+		}
+	}
+}
+
+func TestKeysAndVals(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	items := []int{5, 3, 4, 1, 2}
+	for _, item := range items {
+		pq.Push(item)
+	}
+
+	keys := pq.Keys()
+	if len(keys) != 5 {
+		t.Errorf("Expected 5 keys, got %d", len(keys))
+	}
+
+	vals := pq.Vals()
+	if len(vals) != 5 {
+		t.Errorf("Expected 5 values, got %d", len(vals))
+	}
+
+	// Verify that modifying the returned slices doesn't affect the queue
+	keys[0] = 100
+	if pq.items[0] == 100 {
+		t.Error("Modifying returned keys should not affect queue")
 	}
 }

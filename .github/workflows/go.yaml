@@ -5,13 +5,14 @@ on:
     branches:
       - main
     tags:
-      - 'v*'  # Triggers the workflow when a tag is pushed
+      - 'v*'
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -26,11 +27,24 @@ jobs:
       - name: Run tests
         run: go test -count=3 -v ./...
 
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+
       - name: Build
         run: go build -v ./...
 
   create_release:
-    needs: build
+    needs: [test, build]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
