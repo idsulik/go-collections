@@ -24,23 +24,28 @@ func New[T any](initialCapacity int) *Deque[T] {
 	}
 }
 
-// resize doubles the capacity of the deque and repositions elements.
+// resize increases the capacity of the deque.
 func (d *Deque[T]) resize() {
 	newCapacity := d.capacity * resizeFactor
-	newBuffer := make([]T, newCapacity)
+	d.reallocate(newCapacity)
+}
 
-	// Copy elements into the new buffer, handling wrap-around
-	if d.tail >= d.head {
-		copy(newBuffer, d.buffer[d.head:d.tail])
-	} else {
-		n := copy(newBuffer, d.buffer[d.head:])
-		copy(newBuffer[n:], d.buffer[:d.tail])
+// reallocate creates a new buffer with the specified capacity and copies elements.
+func (d *Deque[T]) reallocate(newCapacity int) {
+	newBuffer := make([]T, newCapacity)
+	if d.size > 0 {
+		if d.tail > d.head {
+			copy(newBuffer, d.buffer[d.head:d.tail])
+		} else {
+			n := copy(newBuffer, d.buffer[d.head:])
+			copy(newBuffer[n:], d.buffer[:d.tail])
+		}
 	}
 
-	d.head = 0
-	d.tail = d.size
 	d.buffer = newBuffer
 	d.capacity = newCapacity
+	d.head = 0
+	d.tail = d.size
 }
 
 // PushFront inserts an item at the front of the deque.
@@ -48,7 +53,11 @@ func (d *Deque[T]) PushFront(item T) {
 	if d.size == d.capacity {
 		d.resize()
 	}
-	d.head = (d.head - 1 + d.capacity) % d.capacity
+	if d.head == 0 {
+		d.head = d.capacity - 1
+	} else {
+		d.head--
+	}
 	d.buffer[d.head] = item
 	d.size++
 }
@@ -71,8 +80,11 @@ func (d *Deque[T]) PopFront() (T, bool) {
 		return zero, false
 	}
 	item := d.buffer[d.head]
+	var zero T
+	d.buffer[d.head] = zero // Clear reference
 	d.head = (d.head + 1) % d.capacity
 	d.size--
+
 	return item, true
 }
 
@@ -83,9 +95,16 @@ func (d *Deque[T]) PopBack() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	d.tail = (d.tail - 1 + d.capacity) % d.capacity
+	if d.tail == 0 {
+		d.tail = d.capacity - 1
+	} else {
+		d.tail--
+	}
 	item := d.buffer[d.tail]
+	var zero T
+	d.buffer[d.tail] = zero // Clear reference
 	d.size--
+
 	return item, true
 }
 
@@ -106,13 +125,23 @@ func (d *Deque[T]) PeekBack() (T, bool) {
 		var zero T
 		return zero, false
 	}
-	index := (d.tail - 1 + d.capacity) % d.capacity
+	index := d.tail
+	if index == 0 {
+		index = d.capacity - 1
+	} else {
+		index--
+	}
 	return d.buffer[index], true
 }
 
 // Len returns the number of elements in the deque.
 func (d *Deque[T]) Len() int {
 	return d.size
+}
+
+// Cap returns the current capacity of the deque.
+func (d *Deque[T]) Cap() int {
+	return d.capacity
 }
 
 // IsEmpty checks if the deque is empty.
@@ -122,12 +151,46 @@ func (d *Deque[T]) IsEmpty() bool {
 
 // Clear removes all elements from the deque.
 func (d *Deque[T]) Clear() {
-	d.buffer = make([]T, d.capacity)
+	// Clear references to help GC
+	for i := range d.buffer {
+		var zero T
+		d.buffer[i] = zero
+	}
 	d.head = 0
 	d.tail = 0
 	d.size = 0
+	// Reset to default capacity if current capacity is much larger
+	if d.capacity > defaultCapacity*2 {
+		d.buffer = make([]T, defaultCapacity)
+		d.capacity = defaultCapacity
+	}
 }
 
+// GetItems returns a new slice containing the deque's elements in order.
 func (d *Deque[T]) GetItems() []T {
-	return d.buffer
+	items := make([]T, d.size)
+	if d.size == 0 {
+		return items
+	}
+
+	if d.tail > d.head {
+		copy(items, d.buffer[d.head:d.tail])
+	} else {
+		n := copy(items, d.buffer[d.head:])
+		copy(items[n:], d.buffer[:d.tail])
+	}
+	return items
+}
+
+// Clone returns a deep copy of the deque.
+func (d *Deque[T]) Clone() *Deque[T] {
+	newDeque := &Deque[T]{
+		buffer:   make([]T, d.capacity),
+		head:     d.head,
+		tail:     d.tail,
+		size:     d.size,
+		capacity: d.capacity,
+	}
+	copy(newDeque.buffer, d.buffer)
+	return newDeque
 }
