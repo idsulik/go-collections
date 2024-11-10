@@ -349,6 +349,11 @@ func TestMarshalUnmarshal(t *testing.T) {
 	}
 	pq := New(less)
 
+	data, err := pq.MarshalJSON()
+	if err != nil {
+		t.Fatalf("Failed to marshal: %v", err)
+	}
+
 	// Add some items
 	items := []int{5, 3, 4, 1, 2}
 	for _, item := range items {
@@ -356,7 +361,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 	}
 
 	// Marshal
-	data, err := json.Marshal(pq)
+	data, err = json.Marshal(pq)
 	if err != nil {
 		t.Fatalf("Failed to marshal: %v", err)
 	}
@@ -377,6 +382,24 @@ func TestMarshalUnmarshal(t *testing.T) {
 	}
 }
 
+func TestMarshalNil(t *testing.T) {
+	var pq *PriorityQueue[int]
+	//goland:noinspection GoDfaNilDereference
+	_, err := pq.MarshalJSON()
+	if err == nil {
+		t.Error("Expected unmarshal into nil PriorityQueue to fail")
+	}
+}
+
+func TestUnmarshalNil(t *testing.T) {
+	var pq *PriorityQueue[int]
+	//goland:noinspection GoDfaNilDereference
+	err := pq.UnmarshalJSON([]byte(`[1,2,3]`))
+	if err == nil {
+		t.Error("Expected unmarshal into nil PriorityQueue to fail")
+	}
+}
+
 func TestContains(t *testing.T) {
 	less := func(a, b int) bool {
 		return a < b
@@ -392,6 +415,25 @@ func TestContains(t *testing.T) {
 	}
 
 	if pq.Contains(4) {
+		t.Error("Did not expect to find 4 in queue")
+	}
+}
+
+func TestContainsFunc(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	if !pq.ContainsFunc(func(v int) bool { return v == 2 }) {
+		t.Error("Expected to find 2 in queue")
+	}
+
+	if pq.ContainsFunc(func(v int) bool { return v == 4 }) {
 		t.Error("Did not expect to find 4 in queue")
 	}
 }
@@ -472,5 +514,33 @@ func TestKeysAndVals(t *testing.T) {
 	keys[0] = 100
 	if pq.items[0] == 100 {
 		t.Error("Modifying returned keys should not affect queue")
+	}
+}
+
+func TestClone(t *testing.T) {
+	less := func(a, b int) bool {
+		return a < b
+	}
+	pq := New(less)
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	clone := pq.Clone()
+
+	// Verify that the clone has the same contents
+	for i := 1; i <= 3; i++ {
+		if !clone.Contains(i) {
+			t.Errorf("Expected to find %d in clone", i)
+		}
+	}
+
+	// Modify the original queue
+	pq.Pop()
+
+	// Verify that the clone is unaffected
+	if clone.Len() != 3 {
+		t.Errorf("Expected length 3, got %d", clone.Len())
 	}
 }
