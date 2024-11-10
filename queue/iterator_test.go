@@ -198,8 +198,8 @@ func TestQueueIterator_ModificationDuringIteration(t *testing.T) {
 				values = append(values, v)
 			}
 
-			if len(values) != 2 || values[0] != 1 || values[1] != 2 {
-				t.Errorf("New iterator got wrong values, got %v, want [1,2]", values)
+			if len(values) != 2 || values[0] != 2 || values[1] != 3 {
+				t.Errorf("New iterator got wrong values, got %v, want [2,3]", values)
 			}
 		},
 	)

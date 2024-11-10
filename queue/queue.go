@@ -49,3 +49,8 @@ func (q *Queue[T]) Clear() {
 func (q *Queue[T]) Iterator() *Iterator[T] {
 	return NewIterator(q)
 }
+
+// GetItems returns a slice of all items in the queue.
+func (q *Queue[T]) GetItems() []T {
+	return q.d.GetItems()
+}

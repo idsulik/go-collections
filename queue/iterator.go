@@ -4,19 +4,31 @@ package queue
 type Iterator[T any] struct {
 	current int
 	items   []T
-	queue   *Queue[T]
 }
 
+// NewIterator creates a new iterator for the queue
 func NewIterator[T any](q *Queue[T]) *Iterator[T] {
-	it := &Iterator[T]{queue: q}
-	it.Reset()
+	it := &Iterator[T]{
+		current: 0,
+		items:   make([]T, q.Len()),
+	}
+
+	// Take a snapshot of current queue items
+	// This ensures modifications to the queue won't affect iteration
+	if q.Len() > 0 {
+		copy(it.items, q.GetItems())
+	}
+
 	return it
 }
 
+// HasNext returns true if there are more elements to iterate over
 func (it *Iterator[T]) HasNext() bool {
 	return it.current < len(it.items)
 }
 
+// Next returns the next element in the iteration
+// Returns the zero value and false if there are no more elements
 func (it *Iterator[T]) Next() (T, bool) {
 	if !it.HasNext() {
 		var zero T
@@ -28,9 +40,8 @@ func (it *Iterator[T]) Next() (T, bool) {
 	return value, true
 }
 
+// Reset restarts iteration from the beginning
+// Uses the same snapshot of items from when iterator was created
 func (it *Iterator[T]) Reset() {
 	it.current = 0
-	// Take a snapshot of current queue items
-	it.items = make([]T, it.queue.Len())
-	copy(it.items, it.queue.d.GetItems())
 }
