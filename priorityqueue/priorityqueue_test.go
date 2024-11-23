@@ -218,6 +218,23 @@ func TestIsEmptyAndLen(t *testing.T) {
 	}
 }
 
+func TestLenFunc(t *testing.T) {
+	pq := NewOrdered[int]()
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	count := pq.LenFunc(
+		func(v int) bool {
+			return v%2 == 0
+		},
+	)
+	if count != 1 {
+		t.Errorf("Expected 1 even number, got %d", count)
+	}
+}
+
 func TestClear(t *testing.T) {
 	less := func(a, b int) bool {
 		return a < b
@@ -400,6 +417,24 @@ func TestUnmarshalNil(t *testing.T) {
 	}
 }
 
+func TestGetFunc(t *testing.T) {
+	pq := NewOrdered[int]()
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	item := pq.GetFunc(func(v int) bool { return v == 2 })
+	if item != 2 {
+		t.Errorf("Expected 2, got %d", item)
+	}
+
+	item = pq.GetFunc(func(v int) bool { return v == 4 })
+	if item != 0 {
+		t.Errorf("Expected 0, got %d", item)
+	}
+}
+
 func TestContains(t *testing.T) {
 	less := func(a, b int) bool {
 		return a < b
@@ -456,6 +491,33 @@ func TestPushIfAbsent(t *testing.T) {
 
 	if pq.Len() != 1 {
 		t.Errorf("Expected length 1, got %d", pq.Len())
+	}
+}
+
+func TestRemoveFunc(t *testing.T) {
+	pq := NewOrdered[int]()
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	// Remove existing item
+	if !pq.RemoveFunc(func(v int) bool { return v == 2 }) {
+		t.Error("Expected to remove 2")
+	}
+
+	// Try to remove non-existent item
+	if pq.RemoveFunc(func(v int) bool { return v == 4 }) {
+		t.Error("Should not be able to remove non-existent item")
+	}
+
+	// Verify remaining items
+	expected := []int{1, 3}
+	for _, exp := range expected {
+		item, ok := pq.Pop()
+		if !ok || item != exp {
+			t.Errorf("Expected %d, got %d", exp, item)
+		}
 	}
 }
 
