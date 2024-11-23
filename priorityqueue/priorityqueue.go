@@ -94,6 +94,17 @@ func (pq *PriorityQueue[T]) Len() int {
 	return len(pq.items)
 }
 
+// LenFunc returns the number of items in the priority queue that satisfy the given function.
+func (pq *PriorityQueue[T]) LenFunc(fn func(T) bool) int {
+	count := 0
+	for _, v := range pq.items {
+		if fn(v) {
+			count++
+		}
+	}
+	return count
+}
+
 // IsEmpty checks if the priority queue is empty.
 func (pq *PriorityQueue[T]) IsEmpty() bool {
 	return len(pq.items) == 0
@@ -133,6 +144,17 @@ func (pq *PriorityQueue[T]) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// GetFunc returns the first item that satisfies the given function
+func (pq *PriorityQueue[T]) GetFunc(fn func(T) bool) T {
+	for _, v := range pq.items {
+		if fn(v) {
+			return v
+		}
+	}
+	var zero T
+	return zero
+}
+
 // Contains checks if an item exists in the queue
 // Note: This is an O(n) operation
 func (pq *PriorityQueue[T]) Contains(item T) bool {
@@ -164,11 +186,10 @@ func (pq *PriorityQueue[T]) PushIfAbsent(item T) bool {
 	return true
 }
 
-// Remove removes the first occurrence of the specified item from the queue
-// Returns true if the item was found and removed, false otherwise
-func (pq *PriorityQueue[T]) Remove(item T) bool {
+// RemoveFunc removes the first item that satisfies the given function
+func (pq *PriorityQueue[T]) RemoveFunc(fn func(T) bool) bool {
 	for i, v := range pq.items {
-		if pq.equals(item, v) {
+		if fn(v) {
 			// Remove the item by swapping with the last element and removing the last
 			last := len(pq.items) - 1
 			pq.items[i] = pq.items[last]
@@ -183,6 +204,16 @@ func (pq *PriorityQueue[T]) Remove(item T) bool {
 		}
 	}
 	return false
+}
+
+// Remove removes the first occurrence of the specified item from the queue
+// Returns true if the item was found and removed, false otherwise
+func (pq *PriorityQueue[T]) Remove(item T) bool {
+	return pq.RemoveFunc(
+		func(v T) bool {
+			return pq.equals(item, v)
+		},
+	)
 }
 
 func (pq *PriorityQueue[T]) Clone() *PriorityQueue[T] {
