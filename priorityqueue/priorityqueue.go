@@ -68,16 +68,22 @@ func (pq *PriorityQueue[T]) Push(item T) {
 
 // Pop removes and returns the highest priority item from the queue.
 func (pq *PriorityQueue[T]) Pop() (T, bool) {
-	if len(pq.items) == 0 {
-		var zero T
-		return zero, false
+	return pq.PopFunc(func(T) bool { return true })
+}
+
+// PopFunc removes and returns the first item that satisfies the given function.
+func (pq *PriorityQueue[T]) PopFunc(fn func(T) bool) (T, bool) {
+	for i, v := range pq.items {
+		if fn(v) {
+			last := len(pq.items) - 1
+			pq.items[i] = pq.items[last]
+			pq.items = pq.items[:last]
+			pq.down(i)
+			return v, true
+		}
 	}
-	top := pq.items[0]
-	last := len(pq.items) - 1
-	pq.items[0] = pq.items[last]
-	pq.items = pq.items[:last]
-	pq.down(0)
-	return top, true
+	var zero T
+	return zero, false
 }
 
 // Peek returns the highest priority item without removing it.
