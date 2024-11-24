@@ -260,7 +260,7 @@ type Task struct {
 	priority int
 }
 
-func TestCustomStruct(t *testing.T) {
+func TestPopCustomStruct(t *testing.T) {
 	less := func(a, b Task) bool {
 		return a.priority < b.priority
 	}
@@ -292,6 +292,36 @@ func TestPopEmpty(t *testing.T) {
 	_, ok := pq.Pop()
 	if ok {
 		t.Error("Expected Pop to return false on empty queue")
+	}
+}
+
+func TestPopFunc(t *testing.T) {
+	pq := NewOrdered[int]()
+
+	pq.Push(1)
+	pq.Push(2)
+	pq.Push(3)
+
+	item, ok := pq.PopFunc(
+		func(v int) bool {
+			return v == 2
+		},
+	)
+
+	if !ok {
+		t.Error("Expected to find and remove 2")
+	}
+	if item != 2 {
+		t.Errorf("Expected 2, got %d", item)
+	}
+
+	item, ok = pq.PopFunc(
+		func(v int) bool {
+			return v == 4
+		},
+	)
+	if ok {
+		t.Error("Did not expect to find 4")
 	}
 }
 
