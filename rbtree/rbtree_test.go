@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/idsulik/go-collections/v2/internal/cmp"
+	"github.com/idsulik/go-collections/v3/internal/cmp"
 )
 
 // verifyRedBlackProperties checks if the tree maintains Red-Black properties
@@ -75,8 +75,8 @@ func TestNewRedBlackTree(t *testing.T) {
 	if !tree.IsEmpty() {
 		t.Error("Expected empty tree")
 	}
-	if tree.Size() != 0 {
-		t.Errorf("Expected size 0, got %d", tree.Size())
+	if tree.Len() != 0 {
+		t.Errorf("Expected size 0, got %d", tree.Len())
 	}
 }
 
@@ -111,8 +111,8 @@ func TestRedBlackTree_Insert(t *testing.T) {
 
 				// Check size
 				expectedSize := len(uniqueValues)
-				if tree.Size() != expectedSize {
-					t.Errorf("Expected size %d, got %d", expectedSize, tree.Size())
+				if tree.Len() != expectedSize {
+					t.Errorf("Expected size %d, got %d", expectedSize, tree.Len())
 				}
 
 				// Verify all values are present
@@ -182,8 +182,8 @@ func TestRedBlackTree_Delete(t *testing.T) {
 				}
 
 				// Check final size
-				if tree.Size() != tt.expectedSize {
-					t.Errorf("Expected size %d, got %d", tt.expectedSize, tree.Size())
+				if tree.Len() != tt.expectedSize {
+					t.Errorf("Expected size %d, got %d", tt.expectedSize, tree.Len())
 				}
 
 				// Verify deleted values are gone
@@ -292,8 +292,8 @@ func TestRedBlackTree_Clear(t *testing.T) {
 	if !tree.IsEmpty() {
 		t.Error("Tree should be empty after Clear()")
 	}
-	if tree.Size() != 0 {
-		t.Errorf("Expected size 0 after Clear(), got %d", tree.Size())
+	if tree.Len() != 0 {
+		t.Errorf("Expected size 0 after Clear(), got %d", tree.Len())
 	}
 	if tree.Height() != -1 {
 		t.Errorf("Expected height -1 after Clear(), got %d", tree.Height())
@@ -331,10 +331,10 @@ func TestRedBlackTree_RandomOperations(t *testing.T) {
 		}
 
 		// Verify size matches unique values
-		if tree.Size() != len(values) {
+		if tree.Len() != len(values) {
 			t.Errorf(
-				"Size mismatch at operation %d: expected %d, got %d",
-				i, len(values), tree.Size(),
+				"Len mismatch at operation %d: expected %d, got %d",
+				i, len(values), tree.Len(),
 			)
 		}
 

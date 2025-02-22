@@ -1,7 +1,7 @@
 package linkedlist
 
 import (
-	"github.com/idsulik/go-collections/v2/iterator"
+	"github.com/idsulik/go-collections/v3/iterator"
 )
 
 // Iterator implements iterator.Iterator for LinkedList

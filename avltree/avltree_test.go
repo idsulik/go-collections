@@ -3,7 +3,7 @@ package avltree
 import (
 	"testing"
 
-	"github.com/idsulik/go-collections/v2/internal/cmp"
+	"github.com/idsulik/go-collections/v3/internal/cmp"
 )
 
 func TestAVLTree(t *testing.T) {
@@ -23,8 +23,8 @@ func TestAVLTree(t *testing.T) {
 				t.Error("Did not expect to find 1 in tree")
 			}
 
-			// Test Size
-			if size := tree.Size(); size != 3 {
+			// Test Len
+			if size := tree.Len(); size != 3 {
 				t.Errorf("Expected size 3, got %d", size)
 			}
 		},
@@ -75,7 +75,7 @@ func TestAVLTree(t *testing.T) {
 			}
 
 			// Verify size after deletion
-			if size := tree.Size(); size != 6 {
+			if size := tree.Len(); size != 6 {
 				t.Errorf("Expected size 6 after deletion, got %d", size)
 			}
 
@@ -157,7 +157,7 @@ func TestAVLTree(t *testing.T) {
 				t.Error("Tree should be empty after Clear()")
 			}
 
-			if size := tree.Size(); size != 0 {
+			if size := tree.Len(); size != 0 {
 				t.Errorf("Expected size 0 after Clear(), got %d", size)
 			}
 		},

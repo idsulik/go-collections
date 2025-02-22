@@ -1,6 +1,6 @@
 package linkedliststack
 
-import "github.com/idsulik/go-collections/v2/linkedlist"
+import "github.com/idsulik/go-collections/v3/linkedlist"
 
 // LinkedListStack represents a LIFO (last-in, first-out) stack implemented using a linked list.
 type LinkedListStack[T any] struct {
@@ -33,7 +33,7 @@ func (s *LinkedListStack[T]) Peek() (T, bool) {
 
 // Len returns the number of items currently in the stack.
 func (s *LinkedListStack[T]) Len() int {
-	return s.linkedList.Size()
+	return s.linkedList.Len()
 }
 
 // IsEmpty checks if the stack is empty.

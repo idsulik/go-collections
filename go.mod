@@ -1,3 +1,3 @@
-module github.com/idsulik/go-collections/v2
+module github.com/idsulik/go-collections/v3
 
 go 1.18

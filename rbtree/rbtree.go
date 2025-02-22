@@ -32,8 +32,8 @@ func New[T any](compare func(a, b T) int) *RedBlackTree[T] {
 	}
 }
 
-// Size returns the number of nodes in the tree
-func (t *RedBlackTree[T]) Size() int {
+// Len returns the number of nodes in the tree
+func (t *RedBlackTree[T]) Len() int {
 	return t.size
 }
 

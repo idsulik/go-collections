@@ -1,8 +1,8 @@
 package queue
 
 import (
-	"github.com/idsulik/go-collections/v2/deque"
-	"github.com/idsulik/go-collections/v2/iterator"
+	"github.com/idsulik/go-collections/v3/deque"
+	"github.com/idsulik/go-collections/v3/iterator"
 )
 
 type Queue[T any] struct {

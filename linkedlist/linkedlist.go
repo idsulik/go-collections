@@ -1,7 +1,7 @@
 package linkedlist
 
 import (
-	"github.com/idsulik/go-collections/v2/iterator"
+	"github.com/idsulik/go-collections/v3/iterator"
 )
 
 type Node[T any] struct {
@@ -117,8 +117,8 @@ func (l *LinkedList[T]) IsEmpty() bool {
 	return l.size == 0
 }
 
-// Size returns the number of elements in the list.
-func (l *LinkedList[T]) Size() int {
+// Len returns the number of elements in the list.
+func (l *LinkedList[T]) Len() int {
 	return l.size
 }
 

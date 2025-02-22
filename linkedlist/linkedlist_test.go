@@ -9,8 +9,8 @@ func TestAddFront(t *testing.T) {
 	list.AddFront(1)
 	list.AddFront(2)
 
-	if got := list.Size(); got != 2 {
-		t.Errorf("Size() = %d; want 2", got)
+	if got := list.Len(); got != 2 {
+		t.Errorf("Len() = %d; want 2", got)
 	}
 
 	if got, _ := list.RemoveFront(); got != 2 {
@@ -27,8 +27,8 @@ func TestAddBack(t *testing.T) {
 	list.AddBack(1)
 	list.AddBack(2)
 
-	if got := list.Size(); got != 2 {
-		t.Errorf("Size() = %d; want 2", got)
+	if got := list.Len(); got != 2 {
+		t.Errorf("Len() = %d; want 2", got)
 	}
 
 	if got, _ := list.RemoveFront(); got != 1 {
@@ -59,8 +59,8 @@ func TestRemoveBack(t *testing.T) {
 	list.AddBack(1)
 	list.AddBack(2)
 
-	if got := list.Size(); got != 2 {
-		t.Errorf("Size() = %d; want 2", got)
+	if got := list.Len(); got != 2 {
+		t.Errorf("Len() = %d; want 2", got)
 	}
 
 	if got, _ := list.RemoveBack(); got != 2 {
@@ -156,28 +156,28 @@ func TestIterateEmptyList(t *testing.T) {
 
 func TestSize(t *testing.T) {
 	list := New[int]()
-	if got := list.Size(); got != 0 {
-		t.Errorf("Size() = %d; want 0", got)
+	if got := list.Len(); got != 0 {
+		t.Errorf("Len() = %d; want 0", got)
 	}
 
 	list.AddBack(1)
-	if got := list.Size(); got != 1 {
-		t.Errorf("Size() = %d; want 1", got)
+	if got := list.Len(); got != 1 {
+		t.Errorf("Len() = %d; want 1", got)
 	}
 
 	list.AddBack(2)
-	if got := list.Size(); got != 2 {
-		t.Errorf("Size() = %d; want 2", got)
+	if got := list.Len(); got != 2 {
+		t.Errorf("Len() = %d; want 2", got)
 	}
 
 	list.RemoveFront()
-	if got := list.Size(); got != 1 {
-		t.Errorf("Size() = %d; want 1", got)
+	if got := list.Len(); got != 1 {
+		t.Errorf("Len() = %d; want 1", got)
 	}
 
 	list.RemoveFront()
-	if got := list.Size(); got != 0 {
-		t.Errorf("Size() = %d; want 0", got)
+	if got := list.Len(); got != 0 {
+		t.Errorf("Len() = %d; want 0", got)
 	}
 }
 
@@ -187,8 +187,8 @@ func TestClear(t *testing.T) {
 	list.AddBack(2)
 
 	list.Clear()
-	if got := list.Size(); got != 0 {
-		t.Errorf("Size() = %d; want 0", got)
+	if got := list.Len(); got != 0 {
+		t.Errorf("Len() = %d; want 0", got)
 	}
 }
 

@@ -38,7 +38,7 @@
 You can install the package using the Go module system:
 
 ```sh
-go get github.com/idsulik/go-collections/v2
+go get github.com/idsulik/go-collections/v3
 ```
 
 ## [Usage](#usage)
@@ -50,7 +50,7 @@ package main
 
 import (
   "fmt"
-  "github.com/idsulik/go-collections/v2/deque"
+  "github.com/idsulik/go-collections/v3/deque"
 )
 
 func main() {
@@ -148,7 +148,7 @@ A singly linked list where elements can be added or removed from both the front 
   - `RemoveBack() (T, bool)`: Removes the node from the end and returns its value.
   - `Iterate(fn func(T) bool)`: Iterates over the list and applies a function to each node's value until the function returns false or the end is reached.
   - `IsEmpty() bool`: Checks if the list is empty.
-  - `Size() int`: Returns the number of elements in the list.
+  - `Len() int`: Returns the number of elements in the list.
   - `Clear()`: Removes all elements from the list.
 
 ---
@@ -474,7 +474,7 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/v2/ringbuffer"
+    "github.com/idsulik/go-collections/v3/ringbuffer"
 )
 
 func main() {
@@ -612,7 +612,7 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/v2/disjointset"
+    "github.com/idsulik/go-collections/v3/disjointset"
 )
 
 func main() {
@@ -686,7 +686,7 @@ An AVL tree is a self-balancing binary search tree where the heights of the two 
   - `Search(value T) bool`: Checks if a value exists in the tree
   - `InOrderTraversal(fn func(T))`: Visits all nodes in ascending order
   - `Clear()`: Removes all elements from the tree
-  - `Size() int`: Returns the number of nodes in the tree
+  - `Len() int`: Returns the number of nodes in the tree
   - `IsEmpty() bool`: Checks if the tree is empty
   - `Height() int`: Returns the height of the tree
 
@@ -697,7 +697,7 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/v2/avltree"
+    "github.com/idsulik/go-collections/v3/avltree"
 )
 
 // Compare function for integers
@@ -734,7 +734,7 @@ func main() {
     tree.Delete(30)
 
     // Check size and height
-    fmt.Printf("\nSize: %d, Height: %d\n", tree.Size(), tree.Height())
+    fmt.Printf("\nSize: %d, Height: %d\n", tree.Len(), tree.Height())
 }
 ```
 
@@ -797,7 +797,7 @@ func New[T any](compare func(a, b T) int) *RedBlackTree[T]
   - `Search(value T) bool`: Checks if a value exists in the tree
   - `InOrderTraversal(fn func(T))`: Visits all nodes in ascending order
   - `Clear()`: Removes all elements from the tree
-  - `Size() int`: Returns the number of nodes in the tree
+  - `Len() int`: Returns the number of nodes in the tree
   - `IsEmpty() bool`: Checks if the tree is empty
   - `Height() int`: Returns the height of the tree
 
@@ -807,7 +807,7 @@ package main
 
 import (
     "fmt"
-    "github.com/idsulik/go-collections/v2/rbtree"
+    "github.com/idsulik/go-collections/v3/rbtree"
 )
 
 // Compare function for integers
@@ -844,7 +844,7 @@ func main() {
     tree.Delete(30)
 
     // Check size and height
-    fmt.Printf("\nSize: %d, Height: %d\n", tree.Size(), tree.Height())
+    fmt.Printf("\nSize: %d, Height: %d\n", tree.Len(), tree.Height())
 }
 ```
 

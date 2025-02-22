@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/idsulik/go-collections/v2/internal/cmp"
+	"github.com/idsulik/go-collections/v3/internal/cmp"
 )
 
 type PriorityQueue[T any] struct {

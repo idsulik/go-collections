@@ -241,8 +241,8 @@ func (t *AVLTree[T]) Clear() {
 	t.size = 0
 }
 
-// Size returns the number of nodes in the tree
-func (t *AVLTree[T]) Size() int {
+// Len returns the number of nodes in the tree
+func (t *AVLTree[T]) Len() int {
 	return t.size
 }
 

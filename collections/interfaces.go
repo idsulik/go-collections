@@ -1,6 +1,6 @@
 package collections
 
-import "github.com/idsulik/go-collections/v2/iterator"
+import "github.com/idsulik/go-collections/v3/iterator"
 
 // Collection is a base interface for all collections.
 type Collection[T any] interface {
