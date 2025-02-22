@@ -13,25 +13,29 @@
 1. [Installation](#installation)
 2. [Usage](#usage)
 3. [Data Structures](#data-structures)
-   - [Set](#set)
-   - [Deque](#deque)
-   - [LinkedList](#linkedlist)
-   - [Queue](#queue)
-   - [Stack Interface](#stack-interface)
-   - [ArrayStack](#arraystack)
-   - [LinkedListStack](#linkedliststack)
-   - [Trie](#trie)
-   - [Priority Queue](#priority-queue)
-   - [Binary Search Tree](#binary-search-tree)
-   - [Skip List](#skip-list)
-   - [Graph](#graph)
-   - [BloomFilter](#bloom-filter)
-   - [RingBuffer(Circular Buffer)](#ring-buffer)
-   - [SegmentTree](#segment-tree)
-   - [DisjointSet(UnionFind)](#disjoint-set)
-   - [AVL Tree](#avl-tree)
-   - [RedBlack Tree](#redblack-tree)
-4. [License](#license)
+  - [Set](#set)
+  - [Deque](#deque)
+  - [TimedDeque](#timed-deque)
+  - [LinkedList](#linkedlist)
+  - [Queue](#queue)
+  - [Stack Interface](#stack-interface)
+  - [ArrayStack](#arraystack)
+  - [LinkedListStack](#linkedliststack)
+  - [Trie](#trie)
+  - [Priority Queue](#priority-queue)
+  - [Binary Search Tree](#binary-search-tree)
+  - [Skip List](#skip-list)
+  - [Graph](#graph)
+  - [BloomFilter](#bloom-filter)
+  - [RingBuffer (Circular Buffer)](#ring-buffer)
+  - [SegmentTree](#segment-tree)
+  - [DisjointSet (UnionFind)](#disjoint-set)
+  - [AVL Tree](#avl-tree)
+  - [RedBlack Tree](#redblack-tree)
+  - [Iterator Interface](#iterator-interface)
+4. [Performance Comparison](#performance-comparison)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## [Installation](#installation)
 
@@ -123,8 +127,50 @@ A double-ended queue (Deque) allows adding and removing elements from both the f
   - `Len() int`: Returns the number of items in the deque.
   - `IsEmpty() bool`: Checks if the deque is empty.
   - `Clear()`: Removes all items from the deque.
+  - `GetItems() []T`: Returns a slice of all items in the deque in order.
+  - `Clone() *Deque[T]`: Returns a deep copy of the deque.
+  - `ForEach(fn func(T))`: Applies a function to each item in the deque.
 
 ---
+
+### [TimedDeque](#timed-deque)
+
+A TimedDeque extends the Deque with time-to-live (TTL) functionality, automatically removing expired items. It's useful for caching, session management, and timed operations.
+
+#### Type `TimedDeque[T any]`
+
+- **Constructor:**
+
+  ```go
+  func New[T any](ttl time.Duration) *TimedDeque[T]
+  ```
+
+  ```go
+  func NewWithCapacity[T any](ttl time.Duration, capacity int) *TimedDeque[T]
+  ```
+
+- **Methods:**
+
+  - `PushFront(item T)`: Adds an item to the front with the current timestamp.
+  - `PushBack(item T)`: Adds an item to the back with the current timestamp.
+  - `PopFront() (T, bool)`: Removes expired items, then returns the front item.
+  - `PopBack() (T, bool)`: Removes expired items, then returns the back item.
+  - `PeekFront() (T, bool)`: Removes expired items, then returns the front item without removing it.
+  - `PeekBack() (T, bool)`: Removes expired items, then returns the back item without removing it.
+  - `Len() int`: Returns the number of non-expired items.
+  - `Cap() int`: Returns the capacity of the underlying deque.
+  - `IsEmpty() bool`: Checks if the deque is empty after removing expired items.
+  - `Clear()`: Removes all items.
+  - `GetItems() []T`: Returns a slice of all non-expired items.
+  - `Clone() *TimedDeque[T]`: Returns a deep copy.
+  - `SetTTL(ttl time.Duration)`: Updates the TTL and removes expired items.
+  - `GetTTL() time.Duration`: Returns the current TTL.
+  - `RemoveExpired()`: Removes all expired items from the deque.
+
+#### Performance Characteristics:
+
+- Time Complexity: Similar to Deque, with additional O(n) for thorough expiration checks
+- Space Complexity: O(n) for n items
 
 ### [LinkedList](#linkedlist)
 
@@ -150,6 +196,8 @@ A singly linked list where elements can be added or removed from both the front 
   - `IsEmpty() bool`: Checks if the list is empty.
   - `Len() int`: Returns the number of elements in the list.
   - `Clear()`: Removes all elements from the list.
+  - `Iterator() iterator.Iterator[T]`: Returns an iterator for the list.
+  - `ForEach(fn func(T))`: Applies a function to each element in the list.
 
 ---
 
@@ -173,6 +221,9 @@ A FIFO (first-in, first-out) queue that supports basic queue operations.
   - `Len() int`: Returns the number of items currently in the queue.
   - `IsEmpty() bool`: Checks if the queue is empty.
   - `Clear()`: Removes all items from the queue.
+  - `Iterator() iterator.Iterator[T]`: Returns an iterator for the queue.
+  - `ForEach(fn func(T))`: Applies a function to each item in the queue.
+  - `GetItems() []T`: Returns a slice of all items in the queue.
 
 ---
 
@@ -285,6 +336,15 @@ A priority queue allows for efficient retrieval and removal of the highest (or l
   - `Len() int`: Returns the number of items in the priority queue.
   - `IsEmpty() bool`: Checks if the priority queue is empty.
   - `Clear()`: Removes all items from the priority queue.
+  - `PopFunc(fn func(T) bool) (T, bool)`: Removes and returns the first item that satisfies the function.
+  - `LenFunc(fn func(T) bool) int`: Returns the number of items that satisfy the function.
+  - `Contains(item T) bool`: Checks if an item exists in the queue.
+  - `PushIfAbsent(item T) bool`: Adds an item only if it's not already present.
+  - `Remove(item T) bool`: Removes the first occurrence of the item.
+  - `RemoveFunc(fn func(T) bool) bool`: Removes the first item that satisfies the function.
+  - `Clone() *PriorityQueue[T]`: Returns a deep copy of the priority queue.
+  - `Keys() []T`: Returns a slice of all items in the queue.
+  - `Vals() []T`: Alias for Keys().
 
 ---
 
@@ -366,6 +426,8 @@ Represents networks of nodes and edges, suitable for various algorithms like sea
   - `Traverse(start T, visit func(T))`: Traverses the graph from a starting node using Breadth-First Search.
   - `Nodes() []T`: Returns a slice of all node values in the graph.
   - `Edges() [][2]T`: Returns a slice of all edges in the graph.
+  - `Iterator() iterator.Iterator[T]`: Returns an iterator for the graph.
+  - `ForEach(fn func(T))`: Applies a function to each node in the graph.
 
 ---
 ### [Bloom Filter](#bloom-filter)
@@ -380,53 +442,30 @@ A Bloom Filter is a space-efficient probabilistic data structure used to test wh
   func NewBloomFilter[T any](expectedItems uint, falsePositiveProb float64) *BloomFilter[T]
   ```
 
-    - `expectedItems`: Expected number of items to be added to the filter
-    - `falsePositiveProb`: Desired false positive probability (between 0 and 1)
+  - `expectedItems`: Expected number of items to be added to the filter
+  - `falsePositiveProb`: Desired false positive probability (between 0 and 1)
 
 - **Methods:**
 
-    - `Add(item T)`: Adds an item to the Bloom Filter.
-    - `Contains(item T) bool`: Tests whether an item might be in the set.
-    - `EstimatedFalsePositiveRate() float64`: Returns the current estimated false positive rate.
-    - `Clear()`: Removes all items from the Bloom Filter.
-    - `Len() int`: Returns the number of items added to the Bloom Filter.
-    - `IsEmpty() bool`: Returns true if no items have been added.
-    - `BitSize() uint`: Returns the size of the underlying bit array.
-    - `NumberOfHashes() uint`: Returns the number of hash functions being used.
-
-#### Example Usage:
-
-```go
-// Create a new Bloom Filter expecting 1000 items with 1% false positive rate
-bf := collections.NewBloomFilter[string](1000, 0.01)
-
-// Add some items
-bf.Add("apple")
-bf.Add("banana")
-bf.Add("cherry")
-
-// Check for membership
-if bf.Contains("apple") {
-    fmt.Println("'apple' is probably in the set")
-}
-
-// Get current false positive rate
-fmt.Printf("False positive rate: %f\n", bf.EstimatedFalsePositiveRate())
-
-// Clear the filter
-bf.Clear()
-```
+  - `Add(item T)`: Adds an item to the Bloom Filter.
+  - `Contains(item T) bool`: Tests whether an item might be in the set.
+  - `EstimatedFalsePositiveRate() float64`: Returns the current estimated false positive rate.
+  - `Clear()`: Removes all items from the Bloom Filter.
+  - `Len() int`: Returns the number of items added to the Bloom Filter.
+  - `IsEmpty() bool`: Returns true if no items have been added.
+  - `BitSize() uint`: Returns the size of the underlying bit array.
+  - `NumberOfHashes() uint`: Returns the number of hash functions being used.
 
 #### Performance Characteristics:
 
 - Space Complexity: O(m), where m is the size of the bit array
 - Time Complexity:
-    - Add: O(k), where k is the number of hash functions
-    - Contains: O(k), where k is the number of hash functions
+  - Add: O(k), where k is the number of hash functions
+  - Contains: O(k), where k is the number of hash functions
 - False Positive Probability: (1 - e^(-kn/m))^k
-    - k: number of hash functions
-    - n: number of inserted elements
-    - m: size of bit array
+  - k: number of hash functions
+  - n: number of inserted elements
+  - m: size of bit array
 
 #### Use Cases:
 
@@ -436,12 +475,6 @@ bf.Clear()
 - Spell checkers
 - Network routing
 - Database query optimization
-
-#### Notes:
-
-- The Bloom Filter automatically optimizes the number of hash functions and bit array size based on the expected number of items and desired false positive rate.
-- The actual false positive rate may vary slightly from the target rate due to the probabilistic nature of the data structure.
-- The filter supports any type that can be converted to a string representation.
 
 ---
 ### [Ring Buffer](#ring-buffer)
@@ -467,64 +500,14 @@ A Ring Buffer (also known as a Circular Buffer) is a fixed-size buffer that wrap
 - `Len() int`: Returns the current number of items in the buffer.
 - `Clear()`: Removes all items from the buffer.
 
-#### Example Usage:
-
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/idsulik/go-collections/v3/ringbuffer"
-)
-
-func main() {
-    // Create a new ring buffer with capacity 3
-    rb := ringbuffer.New[string](3)
-
-    // Add some items
-    rb.Write("first")
-    rb.Write("second")
-    rb.Write("third")
-
-    // Buffer is now full
-    fmt.Println(rb.IsFull()) // Output: true
-
-    // Read an item
-    value, ok := rb.Read()
-    if ok {
-        fmt.Println(value) // Output: "first"
-    }
-
-    // Now we can write another item
-    rb.Write("fourth")
-
-    // Read all remaining items
-    for !rb.IsEmpty() {
-        if value, ok := rb.Read(); ok {
-            fmt.Println(value)
-        }
-    }
-}
-```
-
 #### Performance Characteristics:
 
 - Space Complexity: O(n), where n is the buffer capacity
 - Time Complexity:
-- Write: O(1)
-- Read: O(1)
-- Peek: O(1)
-- Clear: O(1)
-
-#### Use Cases:
-
-- Streaming data processing
-- Fixed-size queues
-- Audio/video buffering
-- Producer-consumer scenarios
-- Network packet buffering
-- Event handling systems
-- Embedded systems with memory constraints
+  - Write: O(1)
+  - Read: O(1)
+  - Peek: O(1)
+  - Clear: O(1)
 
 ---
 ### [Segment Tree](#segment-tree)
@@ -548,25 +531,6 @@ A Segment Tree is a versatile data structure that supports various range query o
   - `Update(index int, value T)`: Updates the value at the given index
   - `Query(left, right int) T`: Returns the result of the operation for the range [left, right]
 
-#### Example Usage:
-
-```go
-// Create a segment tree for range sum queries
-arr := []int{1, 3, 5, 7, 9}
-st := collections.NewSegmentTree(arr, 0, func(a, b int) int { return a + b })
-
-// Query range sum
-sum := st.Query(1, 3) // Sum of elements from index 1 to 3
-
-// Update value
-st.Update(2, 6) // Change value at index 2 to 6
-
-// Create a segment tree for range minimum queries
-minSt := collections.NewSegmentTree(arr, math.Inf(1), func(a, b float64) float64 {
-    return math.Min(a, b)
-})
-```
-
 #### Performance Characteristics:
 
 - Construction: O(n)
@@ -574,13 +538,6 @@ minSt := collections.NewSegmentTree(arr, math.Inf(1), func(a, b float64) float64
 - Point Update: O(log n)
 - Space Complexity: O(n)
 
-#### Use Cases:
-
-- Range sum/min/max queries with updates
-- Finding GCD/LCM over ranges
-- Statistical range queries
-- Competitive programming
-- Database query optimization
 ---
 ### [Disjoint Set](#disjoint-set)
 
@@ -605,42 +562,6 @@ A Disjoint Set (also known as Union-Find) is a data structure that keeps track o
   - `IsEmpty() bool`: Returns true if the disjoint set contains no elements.
   - `GetSets() map[T][]T`: Returns a map of representatives to their set members.
 
-#### Example Usage:
-
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/idsulik/go-collections/v3/disjointset"
-)
-
-func main() {
-    // Create a new disjoint set
-    ds := disjointset.New[string]()
-
-    // Create individual sets
-    ds.MakeSet("A")
-    ds.MakeSet("B")
-    ds.MakeSet("C")
-    ds.MakeSet("D")
-
-    // Merge sets
-    ds.Union("A", "B")
-    ds.Union("C", "D")
-
-    // Check if elements are in the same set
-    fmt.Println(ds.Connected("A", "B")) // true
-    fmt.Println(ds.Connected("A", "C")) // false
-
-    // Get all sets
-    sets := ds.GetSets()
-    for root, elements := range sets {
-        fmt.Printf("Set with root %v: %v\n", root, elements)
-    }
-}
-```
-
 #### Performance Characteristics:
 
 - MakeSet: O(1)
@@ -650,16 +571,6 @@ func main() {
 
 Where α(n) is the inverse Ackermann function, which grows extremely slowly and is effectively constant for all practical values of n.
 
-#### Use Cases:
-
-- Detecting cycles in graphs
-- Finding connected components
-- Network connectivity
-- Image processing (connected component labeling)
-- Kruskal's minimum spanning tree algorithm
-- Dynamic connectivity problems
-- Online dynamic connectivity
-- Percolation analysis
 ---
 
 ### [AVL Tree](#avl-tree)
@@ -690,54 +601,6 @@ An AVL tree is a self-balancing binary search tree where the heights of the two 
   - `IsEmpty() bool`: Checks if the tree is empty
   - `Height() int`: Returns the height of the tree
 
-#### Example Usage:
-
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/idsulik/go-collections/v3/avltree"
-)
-
-// Compare function for integers
-func compareInts(a, b int) int {
-    if a < b {
-        return -1
-    }
-    if a > b {
-        return 1
-    }
-    return 0
-}
-
-func main() {
-    // Create a new AVL tree
-    tree := avl.New[int](compareInts)
-
-    // Insert values
-    values := []int{50, 30, 70, 20, 40, 60, 80}
-    for _, v := range values {
-        tree.Insert(v)
-    }
-
-    // Search for values
-    fmt.Println(tree.Search(30)) // true
-    fmt.Println(tree.Search(45)) // false
-
-    // Traverse the tree in order
-    tree.InOrderTraversal(func(value int) {
-        fmt.Printf("%d ", value)
-    }) // Output: 20 30 40 50 60 70 80
-
-    // Delete a value
-    tree.Delete(30)
-
-    // Check size and height
-    fmt.Printf("\nSize: %d, Height: %d\n", tree.Len(), tree.Height())
-}
-```
-
 #### Performance Characteristics:
 
 | Operation | Average Case | Worst Case |
@@ -747,38 +610,8 @@ func main() {
 | Insert    | O(log n)     | O(log n)   |
 | Delete    | O(log n)     | O(log n)   |
 
-Where n is the number of nodes in the tree.
-
-#### Balance Property:
-
-The AVL tree maintains the following invariants:
-1. The heights of the left and right subtrees of any node differ by at most 1
-2. Balance factor = height(left subtree) - height(right subtree)
-3. Balance factor must be in {-1, 0, 1} for all nodes
-
-#### Use Cases:
-
-1. **Database Indexing:**
-   - Maintaining sorted indices for fast lookups
-   - Range queries on indexed columns
-
-2. **Memory Management:**
-   - Managing memory allocation segments
-   - Virtual memory page tables
-
-3. **File System:**
-   - Directory structures
-   - File allocation tables
-
-4. **Network Routing:**
-   - IP routing tables
-   - Network flow optimization
-
-5. **Game Development:**
-   - Spatial partitioning
-   - Scene graph management
 ---
-### [Red-Black Tree](#red-black-tree)
+### [Red-Black Tree](#redblack-tree)
 A Red-Black Tree is a self-balancing binary search tree where each node is colored either red or black, following specific rules that maintain balance. This ensures O(log n) time complexity for insertions, deletions, and lookups.
 
 #### Type `RedBlackTree[T any]`
@@ -800,53 +633,6 @@ func New[T any](compare func(a, b T) int) *RedBlackTree[T]
   - `Len() int`: Returns the number of nodes in the tree
   - `IsEmpty() bool`: Checks if the tree is empty
   - `Height() int`: Returns the height of the tree
-
-#### Example Usage:
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/idsulik/go-collections/v3/rbtree"
-)
-
-// Compare function for integers
-func compareInts(a, b int) int {
-    if a < b {
-        return -1
-    }
-    if a > b {
-        return 1
-    }
-    return 0
-}
-
-func main() {
-    // Create a new Red-Black tree
-    tree := rbtree.New[int](compareInts)
-
-    // Insert values
-    values := []int{50, 30, 70, 20, 40, 60, 80}
-    for _, v := range values {
-        tree.Insert(v)
-    }
-
-    // Search for values
-    fmt.Println(tree.Search(30))  // true
-    fmt.Println(tree.Search(45))  // false
-
-    // Traverse the tree in order
-    tree.InOrderTraversal(func(value int) {
-        fmt.Printf("%d ", value)
-    }) // Output: 20 30 40 50 60 70 80
-
-    // Delete a value
-    tree.Delete(30)
-
-    // Check size and height
-    fmt.Printf("\nSize: %d, Height: %d\n", tree.Len(), tree.Height())
-}
-```
 
 #### Performance Characteristics:
 | Operation | Average Case | Worst Case |
@@ -888,7 +674,25 @@ The Red-Black tree maintains the following invariants:
   - Garbage collection algorithms
 ---
 
-## Performance Comparison
+### [Iterator Interface](#iterator-interface)
+
+An interface for iterating over collections in a standardized way.
+
+#### Type `Iterator[T any]`
+
+- **Methods:**
+
+  - `HasNext() bool`: Returns true if there are more elements to iterate over.
+  - `Next() (T, bool)`: Returns the next element in the iteration and false if there are no more elements.
+  - `Reset()`: Restarts the iteration from the beginning.
+
+#### Type `Iterable[T any]`
+
+- **Methods:**
+
+  - `Iterator() Iterator[T]`: Returns a new iterator for the collection.
+
+## [Performance Comparison](#performance-comparison)
 
 | Data Structure  | Access   | Search   | Insertion | Deletion | Space                    |
 |-----------------|----------|----------|-----------|----------|--------------------------|
@@ -908,6 +712,9 @@ The Red-Black tree maintains the following invariants:
 | ArrayStack      | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
 | LinkedListStack | O(1)     | O(n)     | O(1)      | O(1)     | O(n)                     |
 | Deque           | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
+| TimedDeque      | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |                    |
+| AVL Tree        | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
+| Red-Black Tree  | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
 
 Where:
 - n is the number of elements
@@ -919,15 +726,15 @@ Where:
 - * indicates amortized time complexity
 - ** for LinkedList, deletion is O(1) at front/back but O(n) for arbitrary position
 
-## Contributing
+## [Contributing](#contributing)
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-## License
+## [License](#license)
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## [Acknowledgments](#acknowledgments)
 
 - Thanks to all contributors who have helped shape this library
 - Inspired by various Go community projects and standard library patterns
