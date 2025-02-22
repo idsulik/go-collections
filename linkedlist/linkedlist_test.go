@@ -180,3 +180,32 @@ func TestSize(t *testing.T) {
 		t.Errorf("Size() = %d; want 0", got)
 	}
 }
+
+func TestClear(t *testing.T) {
+	list := New[int]()
+	list.AddBack(1)
+	list.AddBack(2)
+
+	list.Clear()
+	if got := list.Size(); got != 0 {
+		t.Errorf("Size() = %d; want 0", got)
+	}
+}
+
+func TestForEach(t *testing.T) {
+	list := New[int]()
+	list.AddBack(1)
+	list.AddBack(2)
+	list.AddBack(3)
+
+	var sum int
+	list.ForEach(
+		func(value int) {
+			sum += value
+		},
+	)
+
+	if sum != 6 {
+		t.Errorf("ForEach() = %d; want 6", sum)
+	}
+}

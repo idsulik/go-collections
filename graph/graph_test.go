@@ -171,3 +171,27 @@ func TestEdges(t *testing.T) {
 		}
 	}
 }
+
+func TestForEach(t *testing.T) {
+	g := New[int](false)
+	g.AddEdge(1, 2, 1.0)
+	g.AddEdge(2, 3, 2.0)
+	g.AddEdge(3, 1, 3.0)
+
+	visited := make(map[int]bool)
+	g.ForEach(
+		func(value int) {
+			visited[value] = true
+		},
+	)
+
+	if len(visited) != 3 {
+		t.Errorf("Expected to visit 3 nodes, visited %d", len(visited))
+	}
+
+	for i := 1; i <= 3; i++ {
+		if !visited[i] {
+			t.Errorf("Node %d was not visited", i)
+		}
+	}
+}

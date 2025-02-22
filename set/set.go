@@ -1,6 +1,10 @@
 package set
 
-import "math"
+import (
+	"math"
+
+	"github.com/idsulik/go-collections/v2/iterator"
+)
 
 // Set represents a set of unique items.
 type Set[T comparable] struct {
@@ -196,6 +200,6 @@ func (s *Set[T]) handleNan(other *Set[T], out *Set[T]) {
 }
 
 // Iterator returns a new iterator for the set.
-func (s *Set[T]) Iterator() *Iterator[T] {
+func (s *Set[T]) Iterator() iterator.Iterator[T] {
 	return NewIterator(s.Elements())
 }

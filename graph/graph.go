@@ -1,5 +1,9 @@
 package graph
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 // Graph represents the graph data structure.
 type Graph[T comparable] struct {
 	directed bool
@@ -241,7 +245,7 @@ func (g *Graph[T]) Edges() [][2]T {
 	return edges
 }
 
-func (g *Graph[T]) Iterator() *Iterator[T] {
+func (g *Graph[T]) Iterator() iterator.Iterator[T] {
 	nodes := g.Nodes()
 	if len(nodes) == 0 {
 		return &Iterator[T]{
@@ -252,4 +256,11 @@ func (g *Graph[T]) Iterator() *Iterator[T] {
 	}
 
 	return NewIterator(g, nodes[0])
+}
+
+// ForEach applies a function to each node in the graph.
+func (g *Graph[T]) ForEach(fn func(T)) {
+	for value := range g.nodes {
+		fn(value)
+	}
 }

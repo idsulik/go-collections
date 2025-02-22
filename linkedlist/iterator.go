@@ -1,12 +1,16 @@
 package linkedlist
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 // Iterator implements iterator.Iterator for LinkedList
 type Iterator[T any] struct {
 	current *Node[T]
 	list    *LinkedList[T]
 }
 
-func NewIterator[T any](list *LinkedList[T]) *Iterator[T] {
+func NewIterator[T any](list *LinkedList[T]) iterator.Iterator[T] {
 	return &Iterator[T]{list: list, current: list.head}
 }
 

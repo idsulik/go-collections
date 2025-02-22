@@ -1,11 +1,15 @@
 package set
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 type Iterator[T any] struct {
 	current int
 	items   []T
 }
 
-func NewIterator[T any](items []T) *Iterator[T] {
+func NewIterator[T any](items []T) iterator.Iterator[T] {
 	return &Iterator[T]{items: items}
 }
 

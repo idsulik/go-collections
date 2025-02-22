@@ -1,6 +1,9 @@
 package queue
 
-import "github.com/idsulik/go-collections/v2/deque"
+import (
+	"github.com/idsulik/go-collections/v2/deque"
+	"github.com/idsulik/go-collections/v2/iterator"
+)
 
 type Queue[T any] struct {
 	d *deque.Deque[T]
@@ -46,8 +49,13 @@ func (q *Queue[T]) Clear() {
 }
 
 // Iterator returns a new iterator for the queue.
-func (q *Queue[T]) Iterator() *Iterator[T] {
+func (q *Queue[T]) Iterator() iterator.Iterator[T] {
 	return NewIterator(q)
+}
+
+// ForEach applies a function to each item in the queue.
+func (q *Queue[T]) ForEach(fn func(T)) {
+	q.d.ForEach(fn)
 }
 
 // GetItems returns a slice of all items in the queue.

@@ -6,7 +6,6 @@ import (
 
 // TestNewQueue tests the creation of a new queue with initial capacity.
 func TestNewQueue(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 
 	if got := q.Len(); got != 0 {
@@ -19,7 +18,6 @@ func TestNewQueue(t *testing.T) {
 
 // TestEnqueue tests adding items to the queue.
 func TestEnqueue(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	q.Enqueue(1)
 	q.Enqueue(2)
@@ -35,7 +33,6 @@ func TestEnqueue(t *testing.T) {
 
 // TestDequeueEmpty tests dequeueing from an empty queue.
 func TestDequeueEmpty(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	if _, ok := q.Dequeue(); ok {
 		t.Errorf("Dequeue() should return false for an empty queue")
@@ -44,7 +41,6 @@ func TestDequeueEmpty(t *testing.T) {
 
 // TestPeek tests peeking at the front of the queue.
 func TestPeek(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	q.Enqueue(1)
 	q.Enqueue(2)
@@ -61,7 +57,6 @@ func TestPeek(t *testing.T) {
 
 // TestPeekEmpty tests peeking into an empty queue.
 func TestPeekEmpty(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	if _, ok := q.Peek(); ok {
 		t.Errorf("Peek() should return false for an empty queue")
@@ -70,7 +65,6 @@ func TestPeekEmpty(t *testing.T) {
 
 // TestLen tests the length of the queue.
 func TestLen(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	if got := q.Len(); got != 0 {
 		t.Errorf("Len() = %d; want 0", got)
@@ -85,7 +79,6 @@ func TestLen(t *testing.T) {
 
 // TestIsEmpty tests checking if the queue is empty.
 func TestIsEmpty(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	if !q.IsEmpty() {
 		t.Errorf("IsEmpty() = false; want true")
@@ -104,7 +97,6 @@ func TestIsEmpty(t *testing.T) {
 
 // TestClear tests clearing the queue.
 func TestClear(t *testing.T) {
-	// Create a new queue with an initial capacity of 10
 	q := New[int](10)
 	q.Enqueue(1)
 	q.Enqueue(2)
@@ -115,5 +107,22 @@ func TestClear(t *testing.T) {
 	}
 	if got := q.Len(); got != 0 {
 		t.Errorf("Len() = %d; want 0 after Clear", got)
+	}
+}
+
+func TestForEach(t *testing.T) {
+	q := New[int](10)
+	q.Enqueue(1)
+	q.Enqueue(2)
+
+	sum := 0
+	q.ForEach(
+		func(item int) {
+			sum += item
+		},
+	)
+
+	if sum != 3 {
+		t.Errorf("ForEach() = %d; want 3", sum)
 	}
 }

@@ -3,6 +3,8 @@ package deque
 import (
 	"math"
 	"testing"
+
+	"github.com/idsulik/go-collections/v2/internal/slices"
 )
 
 func TestPushFront(t *testing.T) {
@@ -294,4 +296,48 @@ func TestEdgeCases(t *testing.T) {
 			}
 		},
 	)
+}
+
+func TestForEach(t *testing.T) {
+	d := New[int](4)
+
+	// Test empty deque
+	var emptyResult []int
+	d.ForEach(
+		func(value int) {
+			emptyResult = append(emptyResult, value)
+		},
+	)
+	if len(emptyResult) != 0 {
+		t.Errorf("Expected empty result, got %v", emptyResult)
+	}
+
+	// Test non-wrapped deque
+	d.PushBack(1)
+	d.PushBack(2)
+	d.PushBack(3)
+	var result []int
+	d.ForEach(
+		func(value int) {
+			result = append(result, value)
+		},
+	)
+	expected := []int{1, 2, 3}
+	if !slices.Equal(result, expected) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test wrapped deque
+	d.PushFront(0)
+	d.PushBack(4)
+	result = nil
+	d.ForEach(
+		func(value int) {
+			result = append(result, value)
+		},
+	)
+	expected = []int{0, 1, 2, 3, 4}
+	if !slices.Equal(result, expected) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
 }

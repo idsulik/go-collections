@@ -194,3 +194,22 @@ func (d *Deque[T]) Clone() *Deque[T] {
 	copy(newDeque.buffer, d.buffer)
 	return newDeque
 }
+
+func (d *Deque[T]) ForEach(fn func(T)) {
+	if d.size == 0 {
+		return
+	}
+
+	if d.tail > d.head {
+		for i := d.head; i < d.tail; i++ {
+			fn(d.buffer[i])
+		}
+	} else {
+		for i := d.head; i < d.capacity; i++ {
+			fn(d.buffer[i])
+		}
+		for i := 0; i < d.tail; i++ {
+			fn(d.buffer[i])
+		}
+	}
+}

@@ -1,5 +1,9 @@
 package linkedlist
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 type Node[T any] struct {
 	Value T
 	Next  *Node[T]
@@ -15,8 +19,17 @@ func New[T any]() *LinkedList[T] {
 	return &LinkedList[T]{}
 }
 
-func (l *LinkedList[T]) Iterator() *Iterator[T] {
+func (l *LinkedList[T]) Iterator() iterator.Iterator[T] {
 	return NewIterator(l)
+}
+
+// ForEach applies a function to each element in the list.
+func (l *LinkedList[T]) ForEach(fn func(T)) {
+	current := l.head
+	for current != nil {
+		fn(current.Value)
+		current = current.Next
+	}
 }
 
 // AddFront adds a new node with the given value to the front of the list.
@@ -99,18 +112,6 @@ func (l *LinkedList[T]) RemoveBack() (T, bool) {
 	return value, true
 }
 
-// Iterate iterates over the linked list and applies a function to each node's value
-// until the end of the list or the function returns false.
-func (l *LinkedList[T]) Iterate(fn func(T) bool) {
-	current := l.head
-	for current != nil {
-		if !fn(current.Value) {
-			break
-		}
-		current = current.Next
-	}
-}
-
 // IsEmpty checks if the list is empty.
 func (l *LinkedList[T]) IsEmpty() bool {
 	return l.size == 0
@@ -126,4 +127,16 @@ func (l *LinkedList[T]) Clear() {
 	l.head = nil
 	l.tail = nil
 	l.size = 0
+}
+
+// Iterate iterates over the linked list and applies a function to each node's value
+// until the end of the list or the function returns false.
+func (l *LinkedList[T]) Iterate(fn func(T) bool) {
+	current := l.head
+	for current != nil {
+		if !fn(current.Value) {
+			break
+		}
+		current = current.Next
+	}
 }

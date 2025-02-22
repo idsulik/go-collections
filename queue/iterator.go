@@ -1,5 +1,9 @@
 package queue
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 // Iterator implements iterator.Iterator for Queue
 type Iterator[T any] struct {
 	current int
@@ -7,7 +11,7 @@ type Iterator[T any] struct {
 }
 
 // NewIterator creates a new iterator for the queue
-func NewIterator[T any](q *Queue[T]) *Iterator[T] {
+func NewIterator[T any](q *Queue[T]) iterator.Iterator[T] {
 	it := &Iterator[T]{
 		current: 0,
 		items:   make([]T, q.Len()),

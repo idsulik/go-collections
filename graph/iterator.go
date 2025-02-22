@@ -1,5 +1,9 @@
 package graph
 
+import (
+	"github.com/idsulik/go-collections/v2/iterator"
+)
+
 // Iterator implements iterator.Iterator for Graph using breadth-first traversal
 type Iterator[T comparable] struct {
 	visited map[T]bool
@@ -9,7 +13,7 @@ type Iterator[T comparable] struct {
 }
 
 // NewIterator creates a new iterator for breadth-first traversal starting from the given node
-func NewIterator[T comparable](g *Graph[T], start T) *Iterator[T] {
+func NewIterator[T comparable](g *Graph[T], start T) iterator.Iterator[T] {
 	it := &Iterator[T]{
 		visited: make(map[T]bool),
 		queue:   make([]T, 0),
