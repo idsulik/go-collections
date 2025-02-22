@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/idsulik/go-collections/v2/internal/slices"
+	"github.com/idsulik/go-collections/v3/internal/slices"
 )
 
 func TestPushFront(t *testing.T) {
