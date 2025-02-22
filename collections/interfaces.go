@@ -17,3 +17,25 @@ type Set[T comparable] interface {
 	Has(item T) bool
 	Iterator() iterator.Iterator[T]
 }
+
+type Stack[T any] interface {
+	Collection[T]
+	Push(item T)
+	Pop() (T, bool)
+	Peek() (T, bool)
+}
+
+type Deque[T any] interface {
+	Collection[T]
+	PushFront(item T)
+	PushBack(item T)
+	PopFront() (T, bool)
+	PopBack() (T, bool)
+}
+
+type Queue[T any] interface {
+	Collection[T]
+	Enqueue(item T)
+	Dequeue() (T, bool)
+	Peek() (T, bool)
+}

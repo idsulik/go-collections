@@ -1,6 +1,7 @@
 package stack
 
 // Stack is an interface representing a LIFO (last-in, first-out) stack.
+// deprecated Use github.com/idsulik/go-collections/v3/collections.Stack instead.
 type Stack[T any] interface {
 	// Push adds an item to the top of the stack.
 	Push(item T)
