@@ -39,3 +39,14 @@ type Queue[T any] interface {
 	Dequeue() (T, bool)
 	Peek() (T, bool)
 }
+
+type Cache[K comparable, V any] interface {
+	Get(key K) (V, bool)
+	Put(key K, value V)
+	Remove(key K) bool
+	Contains(key K) bool
+	Len() int
+	Cap() int
+	IsEmpty() bool
+	Clear()
+}

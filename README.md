@@ -18,6 +18,7 @@
     - [TimedDeque](#timed-deque)
     - [LinkedList](#linkedlist)
     - [Queue](#queue)
+    - [LRU Cache](#lru-cache)
     - [Stack Interface](#stack-interface)
     - [ArrayStack](#arraystack)
     - [LinkedListStack](#linkedliststack)
@@ -224,6 +225,59 @@ A FIFO (first-in, first-out) queue that supports basic queue operations.
   - `Iterator() iterator.Iterator[T]`: Returns an iterator for the queue.
   - `ForEach(fn func(T))`: Applies a function to each item in the queue.
   - `GetItems() []T`: Returns a slice of all items in the queue.
+
+---
+
+### [LRU Cache](#lru-cache)
+
+An LRU (Least Recently Used) cache is a fixed-capacity cache that evicts the least recently used items when the capacity is exceeded. It provides O(1) time complexity for both get and put operations by using a combination of a hash map and a doubly linked list.
+
+#### Type `LRUCache[K comparable, V any]`
+
+- **Constructor:**
+
+  ```go
+  func New[K comparable, V any](capacity int) (*LRUCache[K, V], error)
+  ```
+
+  - `capacity`: The maximum number of key-value pairs the cache can hold. Must be positive.
+
+- **Methods:**
+
+  - `Get(key K) (V, bool)`: Retrieves a value from the cache and marks it as recently used.
+  - `Put(key K, value V)`: Adds or updates a key-value pair in the cache.
+  - `Remove(key K) bool`: Removes a key from the cache and returns true if the key existed.
+  - `Peek(key K) (V, bool)`: Retrieves a value without marking it as recently used.
+  - `Contains(key K) bool`: Checks if a key exists in the cache without affecting its position.
+  - `Len() int`: Returns the current number of items in the cache.
+  - `Cap() int`: Returns the capacity of the cache.
+  - `IsEmpty() bool`: Returns true if the cache is empty.
+  - `IsFull() bool`: Returns true if the cache is at capacity.
+  - `Clear()`: Removes all items from the cache.
+  - `Keys() []K`: Returns a slice of all keys ordered from most to least recently used.
+  - `Values() []V`: Returns a slice of all values ordered from most to least recently used.
+  - `Oldest() (K, V, bool)`: Returns the least recently used key-value pair without removing it.
+  - `Newest() (K, V, bool)`: Returns the most recently used key-value pair without removing it.
+  - `Resize(newCapacity int) error`: Changes the capacity of the cache, evicting items if necessary.
+  - `ForEach(fn func(key K, value V) bool)`: Iterates over all key-value pairs from most to least recently used.
+  - `String() string`: Returns a string representation of the cache.
+
+#### Performance Characteristics:
+
+- **Time Complexity:**
+  - Get: O(1)
+  - Put: O(1)
+  - Remove: O(1)
+  - Contains/Peek: O(1)
+- **Space Complexity:** O(capacity)
+
+#### Use Cases:
+
+- **Web Caching:** Store frequently accessed web pages or API responses
+- **Database Query Caching:** Cache expensive database query results
+- **Image/Asset Caching:** Store processed images or other assets
+- **Session Management:** Maintain user session data with automatic cleanup
+- **Memoization:** Cache function results for expensive computations
 
 ---
 
@@ -698,6 +752,7 @@ An interface for iterating over collections in a standardized way.
 |-----------------|----------|----------|-----------|----------|--------------------------|
 | Array           | O(1)     | O(n)     | O(n)      | O(n)     | O(n)                     |
 | Set             | O(1)     | O(1)     | O(1)      | O(1)     | O(n)                     |
+| LRU Cache       | O(1)     | O(1)     | O(1)      | O(1)     | O(capacity)              |
 | Queue           | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |
 | Priority Queue  | O(1)     | O(1)     | O(log n)  | O(log n) | O(n)                     |
 | BST (balanced)  | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
