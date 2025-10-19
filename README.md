@@ -33,6 +33,7 @@
     - [DisjointSet (UnionFind)](#disjoint-set)
     - [AVL Tree](#avl-tree)
     - [RedBlack Tree](#redblack-tree)
+    - [B-Tree](#b-tree)
     - [Iterator Interface](#iterator-interface)
 4. [Performance Comparison](#performance-comparison)
 5. [Contributing](#contributing)
@@ -728,6 +729,111 @@ The Red-Black tree maintains the following invariants:
   - Garbage collection algorithms
 ---
 
+### [B-Tree](#b-tree)
+A B-Tree is a self-balancing tree data structure that maintains sorted data and allows searches, sequential access, insertions, and deletions in logarithmic time. B-Trees are optimized for systems that read and write large blocks of data, making them ideal for databases and file systems.
+
+#### Type `BTree[T Ordered]`
+- **Constructor:**
+```go
+func New[T Ordered](degree int) *BTree[T]
+```
+- *`degree`*: The minimum degree (t) of the B-Tree. Must be at least 2.
+  - Each node can contain at most 2t-1 keys
+  - Each node (except root) must contain at least t-1 keys
+  - Each internal node can have at most 2t children
+  - Higher degree means more keys per node (common: 2-4 for in-memory, higher for disk-based)
+
+- **Methods:**
+  - `Insert(value T)`: Adds a value to the tree (duplicates are ignored)
+  - `Delete(value T) bool`: Removes a value from the tree
+  - `Search(value T) bool`: Checks if a value exists in the tree
+  - `InOrderTraversal(fn func(T))`: Visits all nodes in ascending order
+  - `Min() (T, bool)`: Returns the minimum value in the tree
+  - `Max() (T, bool)`: Returns the maximum value in the tree
+  - `Clear()`: Removes all elements from the tree
+  - `Len() int`: Returns the number of nodes in the tree
+  - `IsEmpty() bool`: Checks if the tree is empty
+  - `Height() int`: Returns the height of the tree
+  - `Degree() int`: Returns the minimum degree of the tree
+
+#### Performance Characteristics:
+| Operation | Average Case | Worst Case |
+|-----------|--------------|------------|
+| Space     | O(n)         | O(n)       |
+| Search    | O(log n)     | O(log n)   |
+| Insert    | O(log n)     | O(log n)   |
+| Delete    | O(log n)     | O(log n)   |
+
+Where n is the number of elements in the tree.
+
+#### Key Properties:
+1. All leaves are at the same level
+2. B-Tree grows and shrinks from the root (unlike BST)
+3. Nodes are kept between t-1 and 2t-1 keys (except root)
+4. Minimizes disk I/O operations by storing multiple keys per node
+5. Better cache performance due to locality of reference
+
+#### Use Cases:
+1. **Database Systems:**
+  - Index structures (B+ trees in MySQL, PostgreSQL)
+  - Range queries and sorted data retrieval
+  - Transaction logs
+
+2. **File Systems:**
+  - NTFS, HFS+, ext4 use B-Tree variants
+  - Directory structures
+  - File allocation tables
+
+3. **Storage Systems:**
+  - SSD controllers
+  - Key-value stores (LevelDB, RocksDB)
+  - Object storage systems
+
+4. **In-Memory Databases:**
+  - Sorted maps with better cache performance
+  - Multi-level indexing
+  - Time-series data storage
+
+#### Example:
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/idsulik/go-collections/v3/btree"
+)
+
+func main() {
+    // Create a B-Tree with degree 3
+    tree := btree.New[int](3)
+    
+    // Insert values
+    values := []int{10, 20, 5, 6, 12, 30, 7, 17}
+    for _, v := range values {
+        tree.Insert(v)
+    }
+    
+    // Search for values
+    fmt.Println(tree.Search(12)) // true
+    fmt.Println(tree.Search(15)) // false
+    
+    // Get min and max
+    min, _ := tree.Min() // 5
+    max, _ := tree.Max() // 30
+    fmt.Printf("Min: %d, Max: %d\n", min, max)
+    
+    // Traverse in order
+    tree.InOrderTraversal(func(v int) {
+        fmt.Printf("%d ", v) // 5 6 7 10 12 17 20 30
+    })
+    
+    // Delete a value
+    tree.Delete(12)
+    fmt.Println(tree.Len()) // 7
+}
+```
+---
+
 ### [Iterator Interface](#iterator-interface)
 
 An interface for iterating over collections in a standardized way.
@@ -770,6 +876,7 @@ An interface for iterating over collections in a standardized way.
 | TimedDeque      | O(1)     | O(n)     | O(1)*     | O(1)*    | O(n)                     |                    |
 | AVL Tree        | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
 | Red-Black Tree  | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
+| B-Tree          | O(log n) | O(log n) | O(log n)  | O(log n) | O(n)                     |
 
 Where:
 - n is the number of elements
